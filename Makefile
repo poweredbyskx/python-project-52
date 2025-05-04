@@ -39,4 +39,10 @@ test-coverage:
 	poetry run coverage report -m --include=task_manager/* --omit=task_manager/settings.py,*/migrations/*,*/tests/*,tests.py
 	poetry run coverage xml --include=task_manager/* --omit=task_manager/settings.py,*/migrations/*,*/tests/*,tests.py
 
+build:
+	make install
+	make migrate
+	make static
+	make compile-texts
+
 PHONY: install lint static migrate dev start test
