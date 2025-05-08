@@ -1,14 +1,12 @@
-from django import forms
+from django.forms import ModelForm
+from .models import Label
+from django.utils.translation import gettext
 
-from task_manager.labels.models import Label
-from task_manager.texts import create_label
 
-
-class LabelForm(forms.ModelForm):
-    name = forms.CharField(
-        max_length=150, required=True, label=create_label['label_name']
-    )
-
+class LabelCreationForm(ModelForm):
     class Meta:
         model = Label
-        fields = ('name',)
+        fields = ['name']
+        labels = {
+            "name": gettext("status_name"),
+        }

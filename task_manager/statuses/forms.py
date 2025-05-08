@@ -1,14 +1,12 @@
-from django import forms
+from django.forms import ModelForm
+from .models import Status
+from django.utils.translation import gettext
 
-from task_manager.statuses.models import Status
-from task_manager.texts import create_status
 
-
-class StatusForm(forms.ModelForm):
-    name = forms.CharField(
-        max_length=150, required=True, label=create_status['status_name']
-    )
-
+class StatusCreationForm(ModelForm):
     class Meta:
         model = Status
-        fields = ('name',)
+        fields = ['name']
+        labels = {
+            "name": gettext("status_name"),
+        }

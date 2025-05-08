@@ -1,47 +1,31 @@
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import ProtectedError
-from django.shortcuts import redirect
-from django.urls import reverse_lazy
-
-from task_manager import texts
+from django.utils.translation import gettext
 
 
-class AuthCheckMixin(LoginRequiredMixin):
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, texts.messages['no_auth'])
-            return redirect(reverse_lazy('login'))
-        return super().dispatch(request, *args, **kwargs)
+class FormView:
+    def get(self, request):
+        values = self.value.objects.all()
+        return render(request, self.template, context={'values': values})
 
 
-class PermissionCheckMixin(UserPassesTestMixin):
-    permission_message = None
-    permission_url = None
-
-    def test_func(self):
-        return self.get_object() == self.request.user
-
-    def handle_no_permission(self):
-        messages.error(self.request, self.permission_message)
-        return redirect(self.permission_url)
+class DeleteView:
+    def get(self, request, *args, **kwargs):
+        value_id = kwargs.get('pk')
+        value = self.value.objects.get(id=value_id)
+        return render(request, self.template,
+                      {'value': value, 'value_id': value_id})
 
 
-class AuthorCheckMixin(PermissionCheckMixin):
-
-    def test_func(self):
-        return self.get_object().author == self.request.user
-
-
-class ProtectDeleteMixin:
-
-    protected_message = None
-    protected_url = None
-
+class EditView:
     def post(self, request, *args, **kwargs):
-        try:
-            return super().post(request, *args, **kwargs)
-        except ProtectedError:
-            messages.error(request, self.protected_message)
-            return redirect(self.protected_url)from django.contrib import messages
+        value_id = kwargs.get('pk')
+        value = self.value.objects.get(id=value_id)
+        form = self.form(request.POST, instance=value)
+        if form.is_valid():
+            form.save()
+            value_edit = gettext(self.text)
+            messages.add_message(request, messages.SUCCESS, value_edit)
+            return redirect(self.path)
+        return render(request, self.template,
+                      {'form': form, 'value_id': value_id})

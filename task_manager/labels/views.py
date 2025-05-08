@@ -1,79 +1,77 @@
-from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-
-from task_manager import texts
-from task_manager.labels.forms import LabelForm
+from django.shortcuts import render, redirect
+from django.views import View
+from task_manager.mixins import DeleteView, EditView, FormView
+from .forms import LabelCreationForm
 from task_manager.labels.models import Label
-from task_manager.mixins import AuthCheckMixin, ProtectDeleteMixin
+from task_manager.tasks.models import Task
+from django.contrib import messages
+from django.utils.translation import gettext
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class LabelsListView(AuthCheckMixin, ListView):
-    template_name = 'labels/labels.html'
-    model = Label
-    context_object_name = 'labels'
-
-    extra_context = {
-        'basic': texts.basic,
-        'texts': texts.create_label,
-    }
+class LabelsViewForm:
+    value = Label
+    template = 'labels/index.html'
 
 
-class LabelCreateView(AuthCheckMixin, SuccessMessageMixin, CreateView):
-    template_name = 'form.html'
-    model = Label
-    form_class = LabelForm
-
-    success_url = reverse_lazy('labels')
-    success_message = texts.messages['label_created']
-
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_user['label_create'],
-        'button_text': texts.buttons['create_label']
-    }
+class LabelsView(LoginRequiredMixin, View, LabelsViewForm, FormView):
+    pass
 
 
-class LabelUpdateView(AuthCheckMixin, SuccessMessageMixin, UpdateView):
-    template_name = 'form.html'
-    model = Label
-    form_class = LabelForm
+class LabelFormCreateView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'labels/new.html',
+                      context={'form': LabelCreationForm()})
 
-    success_url = reverse_lazy('labels')
-    success_message = texts.messages['label_changed']
+    def post(self, request):
+        form = LabelCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            label_created = gettext("label_created")
+            messages.add_message(request, messages.SUCCESS, label_created)
+            return redirect('labels')
+        context = {
+            'form': form
+        }
+        return render(request, 'labels/new.html', context)
 
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_label['label_change_title'],
-        'button_text': texts.buttons['update_button']
-    }
+
+class LabelEditForm:
+    value = Label
+    template = 'labels/edit.html'
+    form = LabelCreationForm
+    text = 'label_edit'
+    path = 'labels'
 
 
-class LabelDeleteView(
-    AuthCheckMixin,
-    ProtectDeleteMixin,
-    SuccessMessageMixin,
-    DeleteView
-):
-    template_name = 'delete.html'
-    model = Label
+class LabelFormEditView(LoginRequiredMixin, View, LabelEditForm, EditView):
+    def get(self, request, *args, **kwargs):
+        label_id = kwargs.get('pk')
+        label = Label.objects.get(id=label_id)
+        form = LabelCreationForm(instance=label)
+        return render(request, 'labels/edit.html',
+                      {'form': form, 'label_id': label_id, 'label': label})
+    pass
 
-    success_url = reverse_lazy('labels')
-    success_message = texts.messages['label_deleted']
 
-    protected_message = texts.messages['protected_label']
-    protected_url = reverse_lazy('labels')
+class LabelForm:
+    value = Label
+    template = 'labels/delete.html'
 
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_label['label_delete_title'],
-        'delete_sure': texts.delete_user['delete_sure'],
-        'dest_url': reverse_lazy('labels'),
-        'delete_cancel': texts.create_label['back_to_labels'],
-        'button_text': texts.buttons['delete_button']
-    }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['delete_obj'] = self.get_object().name
-        return context
+class LabelFormDeleteView(LoginRequiredMixin, View, LabelForm, DeleteView):
+    pass
+
+    def post(self, request, *args, **kwargs):
+        label_id = kwargs.get('pk')
+        label = Label.objects.get(id=label_id)
+        task = Task.objects.filter(labels=label_id)
+        if task:
+            messages.add_message(request, messages.ERROR,
+                                 gettext("remove_label_error"))
+            return redirect('labels')
+        if label:
+            label.delete()
+            label_remove = gettext("label_remove")
+            messages.add_message(request, messages.SUCCESS, label_remove)
+            return redirect('labels')

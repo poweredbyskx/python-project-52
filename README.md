@@ -7,7 +7,7 @@
 
 ### To get started
 1. Clone git repo:
-  `git@https://github.com/popperony/python-project-52.git`
+  `git@https://github.com/poweredbyskx/python-project-52.git`
 2. Go to directory python-project-52:
   `cd python-project-52`
 3.  Configuring `poetry` to create a virtual environment:

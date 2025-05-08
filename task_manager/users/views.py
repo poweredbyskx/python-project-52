@@ -1,94 +1,127 @@
-from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
-
-from task_manager import texts
-from task_manager.mixins import (AuthCheckMixin,
-                                 PermissionCheckMixin,
-                                 ProtectDeleteMixin
-                                 )
-from task_manager.users.forms import UserForm, UpdateUserForm
+from django.shortcuts import render, redirect
+from django.views import View
+from .forms import (UserCreationForm, CustomUserChangeForm)
 from task_manager.users.models import User
+from task_manager.tasks.models import Task
+from django.contrib import messages
+from django.utils.translation import gettext
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout
 
 
-class UserCreateView(SuccessMessageMixin, CreateView):
-    template_name = 'form.html'
-    model = User
-    form_class = UserForm
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_user['register'],
-        'button_text': texts.buttons['create_button']
-    }
-    success_url = reverse_lazy('login')
-    success_message = texts.messages['user_created']
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        messages.add_message(request, messages.INFO,
+                             gettext("log_out"))
+        return redirect('root')
 
 
-class UsersListView(ListView):
-    template_name = 'users/list.html'
-    model = User
-    context_object_name = 'users'
-    extra_context = {
-        'basic': texts.basic,
-        'list': texts.users_list,
-    }
+class LoginView(View):
+    def get(self, request):
+        context = {
+            'form': AuthenticationForm()
+        }
+        return render(request, 'registration/login.html', context)
+
+    def post(self, request):
+        form = AuthenticationForm(request.POST)
+        context = {
+            'form': form
+        }
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.add_message(request, messages.SUCCESS,
+                                 gettext("auth_success"))
+            return redirect('root')
+        else:
+            messages.error(request, gettext("auth_form_error"))
+            return render(request, 'registration/login.html', context)
 
 
-class UserUpdateView(
-    AuthCheckMixin,
-    PermissionCheckMixin,
-    SuccessMessageMixin,
-    UpdateView
-):
-    template_name = 'form.html'
-    model = User
-    form_class = UpdateUserForm
-
-    success_url = reverse_lazy('users')
-    success_message = texts.messages['success_update']
-
-    permission_message = texts.messages['no_rights']
-    permission_url = reverse_lazy('users')
-
-    extra_context = {
-        'basic': texts.basic,
-        'list': texts.users_list,
-        'title': texts.create_user['update_title'],
-        'button_text': texts.buttons['update_button']
-    }
+class IndexView(View):
+    def get(self, request):
+        return render(request, 'welcome/index.html')
 
 
-class UserDeleteView(
-    AuthCheckMixin,
-    PermissionCheckMixin,
-    ProtectDeleteMixin,
-    SuccessMessageMixin,
-    DeleteView
-):
-    template_name = 'delete.html'
-    model = User
+class UsersView(View):
+    def get(self, request):
+        users = User.objects.all()
+        return render(request, 'users/index.html', context={'users': users})
 
-    success_url = reverse_lazy('users')
-    success_message = texts.messages['success_delete']
 
-    permission_message = texts.messages['no_rights']
-    permission_url = reverse_lazy('users')
+class UsersFormCreateView(View):
+    def get(self, request):
+        context = {
+            'form': UserCreationForm()
+        }
+        return render(request, 'registration/register.html', context)
 
-    protected_message = texts.messages['protected_user']
-    protected_url = reverse_lazy('users')
+    def post(self, request):
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 gettext("user_create_success"))
+            return redirect('login')
+        context = {
+            'form': form
+        }
+        return render(request, 'registration/register.html', context)
 
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.delete_user['delete_title'],
-        'delete_sure': texts.delete_user['delete_sure'],
-        'dest_url': reverse_lazy('users'),
-        'delete_cancel': texts.delete_user['delete_cancel'],
-        'button_text': texts.buttons['delete_button']
-    }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user = self.request.user
-        if user.is_authenticated:
-            context['delete_obj'] = user.get_full_name()
-        return context
+class UsersFormEditView(View):
+    def get(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated):
+            auth_error = gettext("auth_error")
+            messages.add_message(request, messages.ERROR, auth_error)
+            return redirect('login')
+        if request.user.id != kwargs.get('pk'):
+            edit_error = gettext("edit_error")
+            messages.add_message(request, messages.ERROR, edit_error)
+            return redirect('users')
+        user_id = kwargs.get('pk')
+        user = User.objects.get(id=user_id)
+        user_form = CustomUserChangeForm(instance=user)
+        return render(request, 'users/edit.html', {'form': user_form,
+                                                   'user_id': user_id})
+
+    def post(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+        user = User.objects.get(id=user_id)
+        user_form = CustomUserChangeForm(request.POST, instance=user)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            user.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 gettext("edit_success"))
+            return redirect('users')
+        return render(request, 'users/edit.html', {'form': user_form,
+                                                   'user_id': user_id})
+
+
+class UsersFormDeleteView(View):
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+        user = User.objects.get(id=user_id)
+        return render(request, 'users/delete.html',
+                      {'user': user, 'user_id': user_id})
+
+    def post(self, request, *args, **kwargs):
+        user_id = kwargs.get('pk')
+        user = User.objects.get(id=user_id)
+        author = Task.objects.filter(author_id=user_id)
+        executor = Task.objects.filter(executor_id=user_id)
+        if author or executor:
+            messages.add_message(request, messages.ERROR,
+                                 gettext("remove_error"))
+            return redirect('users')
+        if user:
+            user.delete()
+            messages.add_message(request, messages.SUCCESS,
+                                 gettext("remove_success"))
+            return redirect('users')

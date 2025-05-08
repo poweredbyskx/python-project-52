@@ -1,99 +1,103 @@
-from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
+from django.shortcuts import render, redirect
+from django.views import View
+
+from task_manager.mixins import EditView
+from .forms import TaskCreationForm, TaskFilter
+from task_manager.tasks.models import Task
+from django.contrib import messages
+from django.utils.translation import gettext
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
 
-from task_manager import texts
-from task_manager.mixins import AuthCheckMixin, AuthorCheckMixin
-from task_manager.tasks.filters import TaskFilter
-from task_manager.tasks.forms import TaskForm
-from task_manager.tasks.models import Task
-from task_manager.users.models import User
+
+class TasksView(LoginRequiredMixin, FilterView):
+    def get(self, request, *args, **kwargs):
+        is_creator = False
+        labels = request.GET.getlist('labels')
+        status_id = request.GET.getlist('status')
+        executor = request.GET.getlist('executor')
+        if (request.GET.get('only_own_tasks')):
+            tasks = TaskFilter(request.GET, queryset=Task.objects.all()
+                               .filter(author_id=request.user.id))
+            is_creator = True
+        else:
+            tasks = TaskFilter(request.GET, queryset=Task.objects.all())
+        return render(request, 'tasks/task_filter.html',
+                      {'filter': tasks, 'is_creator': is_creator,
+                       'labels': labels, 'status_id': status_id,
+                       'executor': executor})
 
 
-class TasksListView(AuthCheckMixin, FilterView):
-    template_name = 'tasks/tasks.html'
-    model = Task
-    filterset_class = TaskFilter
-    context_object_name = 'tasks'
+class TaskFormCreateView(LoginRequiredMixin, View):
+    def get(self, request):
+        context = {
+            'form': TaskCreationForm()
+        }
+        return render(request, 'tasks/new.html', context)
 
-    extra_context = {
-        'basic': texts.basic,
-        'texts': texts.create_tasks,
-        'button_text': texts.buttons['demonstrate']
-    }
-
-
-class TaskView(AuthCheckMixin, DetailView):
-    template_name = 'tasks/task_detail.html'
-    model = Task
-    context_object_name = 'task'
-    extra_context = {
-        'basic': texts.basic,
-        'texts': texts.create_tasks,
-    }
-
-
-class TaskCreateView(AuthCheckMixin, SuccessMessageMixin, CreateView):
-    template_name = 'form.html'
-    model = Task
-    form_class = TaskForm
-
-    success_url = reverse_lazy('tasks')
-    success_message = texts.messages['task_created']
-
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_tasks['task_create'],
-        'button_text': texts.buttons['create_label']
-    }
-
-    def form_valid(self, form):
-        form.instance.author = User.objects.get(pk=self.request.user.pk)
-        return super().form_valid(form)
+    def post(self, request):
+        form = TaskCreationForm(request.POST)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.author = request.user
+            task.save()
+            for label in form.cleaned_data['labels']:
+                task.labels.add(label)
+            task.save()
+            task_created = gettext("task_created")
+            messages.add_message(request, messages.SUCCESS, task_created)
+            return redirect('tasks')
+        context = {
+            'form': form
+        }
+        return render(request, 'tasks/new.html', context)
 
 
-class TaskUpdateView(AuthCheckMixin, SuccessMessageMixin, UpdateView):
-    template_name = 'form.html'
-    model = Task
-    form_class = TaskForm
-
-    success_url = reverse_lazy('tasks')
-    success_message = texts.messages['task_changed']
-
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_tasks['task_update_title'],
-        'button_text': texts.buttons['update_button']
-    }
+class TaskForm:
+    value = Task
+    template = 'tasks/edit.html'
+    form = TaskCreationForm
+    text = 'task_edit'
+    path = 'tasks'
 
 
-class TaskDeleteView(
-    AuthCheckMixin,
-    AuthorCheckMixin,
-    SuccessMessageMixin,
-    DeleteView
-):
+class TaskFormEditView(LoginRequiredMixin, View, TaskForm, EditView):
+    def get(self, request, *args, **kwargs):
+        task_id = kwargs.get('pk')
+        task = Task.objects.get(id=task_id)
+        labels = task.labels.all().values_list('name')
+        form = TaskCreationForm(instance=task)
+        return render(request, 'tasks/edit.html',
+                      {'form': form, 'task_id': task_id, 'task': task,
+                       'labels': labels})
+    pass
 
-    template_name = 'delete.html'
-    model = Task
 
-    success_url = reverse_lazy('tasks')
-    success_message = texts.messages['task_deleted']
+class TaskFormDeleteView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        task_id = kwargs.get('pk')
+        task = Task.objects.get(id=task_id)
+        return render(request, 'tasks/delete.html',
+                      {'task': task, 'task_id': task_id})
 
-    permission_message = texts.messages['protected_task']
-    permission_url = reverse_lazy('tasks')
+    def post(self, request, *args, **kwargs):
+        task_id = kwargs.get('pk')
+        task = Task.objects.get(id=task_id)
+        if request.user.id != task.author_id:
+            messages.add_message(request, messages.ERROR,
+                                 gettext("remove_task_error"))
+            return redirect('tasks')
+        if task:
+            task.delete()
+            task_remove = gettext("task_remove")
+            messages.add_message(request, messages.SUCCESS, task_remove)
+            return redirect('tasks')
 
-    extra_context = {
-        'basic': texts.basic,
-        'title': texts.create_tasks['task_delete_title'],
-        'delete_sure': texts.delete_user['delete_sure'],
-        'dest_url': reverse_lazy('tasks'),
-        'delete_cancel': texts.create_tasks['task_detail_cancel'],
-        'button_text': texts.buttons['delete_button']
-    }
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['delete_obj'] = self.get_object().name
-        return contextfrom django.contrib.messages.views import SuccessMessageMixin
+class TaskFormView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        task_id = kwargs.get('pk')
+        task = Task.objects.get(id=task_id)
+        labels = task.labels.all()
+        return render(request, 'tasks/view.html',
+                      {'task_id': task_id, 'task': task, 'labels': labels})
