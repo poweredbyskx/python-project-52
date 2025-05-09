@@ -1,4 +1,5 @@
 ### Hexlet tests and linter status:
+
 [![Actions Status](https://github.com/poweredbyskx/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/poweredbyskx/python-project-52/actions)
 [![Maintainability](https://qlty.sh/badges/59faff8e-9312-470d-a869-8fa742ed3539/maintainability.svg)](https://qlty.sh/gh/poweredbyskx/projects/python-project-52)
 [![Python CI](https://github.com/poweredbyskx/python-project-52/actions/workflows/python-ci.yml/badge.svg)](https://github.com/poweredbyskx/python-project-52/actions/workflows/python-ci.yml)
@@ -7,7 +8,7 @@
 
 ### To get started
 1. Clone git repo:
-  `git@https://github.com/poweredbyskx/python-project-52.git`
+  `https://github.com/poweredbyskx/python-project-52.git`
 2. Go to directory python-project-52:
   `cd python-project-52`
 3.  Configuring `poetry` to create a virtual environment:
