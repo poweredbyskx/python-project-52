@@ -25,3 +25,14 @@ coverage = "^7.4.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[project]
+name = "hexlet-code"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+  {name = "Samvel Kocharyan", email = "poweredbyskx@gmail.com"}
+]
