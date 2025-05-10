@@ -1,0 +1,15 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Статусы</h2>
+  <ul>
+    {% for status in statuses %}
+      <li>
+        {{ status.name }}
+        <a href="{% url 'status_update' status.pk %}">Редактировать</a>
+        <a href="{% url 'status_delete' status.pk %}">Удалить</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'status_create' %}">Создать новый статус</a>
+{% endblock %}

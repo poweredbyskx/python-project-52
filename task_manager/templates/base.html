@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Менеджер задач{% endblock %}</title>
+  <!-- Подключение Bootstrap через CDN -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  {% if messages %}
+    <div class="alert alert-info">
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <p>Привет, {{ user.username }}! <a href="{% url 'logout' %}">Выход</a></p>
+  {% else %}
+    <p><a href="{% url 'login' %}">Вход</a></p>
+  {% endif %}
+
+  <nav>
+    <ul>
+      <li><a href="{% url 'label_list' %}">Метки</a></li>
+      <li><a href="{% url 'task_list' %}">Задачи</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Подключение скриптов Bootstrap -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
