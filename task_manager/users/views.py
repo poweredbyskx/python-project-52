@@ -1,45 +1,41 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from task_manager.users.models import User
 from task_manager.tasks.models import Task
 from django.contrib import messages
-from django.utils.translation import gettext
+from django.utils.translation import gettext as _
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        messages.add_message(request, messages.INFO,
-                             gettext("log_out"))
+        messages.info(request, _("log_out"))
         return redirect('root')
 
 
 class LoginView(View):
     def get(self, request):
-        context = {
+        return render(request, 'registration/login.html', {
             'form': AuthenticationForm()
-        }
-        return render(request, 'registration/login.html', context)
+        })
 
     def post(self, request):
-        form = AuthenticationForm(request.POST)
-        context = {
-            'form': form
-        }
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            messages.add_message(request, messages.SUCCESS,
-                                 gettext("auth_success"))
-            return redirect('root')
-        else:
-            messages.error(request, gettext("auth_form_error"))
-            return render(request, 'registration/login.html', context)
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None and user.is_active:
+                login(request, user)
+                messages.success(request, _("auth_success"))
+                return redirect('root')
+
+        messages.error(request, _("auth_form_error"))
+        return render(request, 'registration/login.html', {'form': form})
 
 
 class IndexView(View):
@@ -50,78 +46,65 @@ class IndexView(View):
 class UsersView(View):
     def get(self, request):
         users = User.objects.all()
-        return render(request, 'users/index.html', context={'users': users})
+        return render(request, 'users/index.html', {'users': users})
 
 
 class UsersFormCreateView(View):
     def get(self, request):
-        context = {
+        return render(request, 'registration/register.html', {
             'form': CustomUserCreationForm()
-        }
-        return render(request, 'registration/register.html', context)
+        })
 
     def post(self, request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            print("✅ Форма валидна")
-            print("🧍 Новый пользователь:", form.cleaned_data)
             form.save()
-            messages.add_message(request, messages.SUCCESS,
-                                 gettext("user_create_success"))
+            messages.success(request, _("user_create_success"))
             return redirect('login')
-        else:
-            print("❌ Ошибки формы:")
-            print(form.errors)
-
-        context = {
-            'form': form
-        }
-        return render(request, 'registration/register.html', context)
+        return render(request, 'registration/register.html', {'form': form})
 
 
-class UsersFormEditView(View):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            messages.error(request, gettext("auth_error"))
-            return redirect('login')
-        if request.user.id != kwargs.get('pk'):
-            messages.error(request, gettext("edit_error"))
+class UsersFormEditView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        if str(request.user.id) != str(pk):
+            messages.error(request, _("edit_error"))
             return redirect('users')
-        user_id = kwargs.get('pk')
-        user = User.objects.get(id=user_id)
-        user_form = CustomUserChangeForm(instance=user)
-        return render(request, 'users/edit.html', {'form': user_form, 'user': user})
 
-    def post(self, request, *args, **kwargs):
-        user_id = kwargs.get('pk')
-        user = User.objects.get(id=user_id)
-        user_form = CustomUserChangeForm(request.POST, instance=user)
-        if user_form.is_valid():
-            user = user_form.save(commit=False)
-            user.save()
-            messages.success(request, gettext("edit_success"))
+        user = get_object_or_404(User, id=pk)
+        form = CustomUserChangeForm(instance=user)
+        return render(request, 'users/edit.html', {'form': form, 'user': user})
+
+    def post(self, request, pk):
+        if str(request.user.id) != str(pk):
+            messages.error(request, _("edit_error"))
             return redirect('users')
-        return render(request, 'users/edit.html', {'form': user_form, 'user': user})
 
-
-class UsersFormDeleteView(View):
-    def get(self, request, *args, **kwargs):
-        user_id = kwargs.get('pk')
-        user = User.objects.get(id=user_id)
-        return render(request, 'users/delete.html',
-                      {'user': user, 'user_id': user_id})
-
-    def post(self, request, *args, **kwargs):
-        user_id = kwargs.get('pk')
-        user = User.objects.get(id=user_id)
-        author = Task.objects.filter(author_id=user_id)
-        executor = Task.objects.filter(executor_id=user_id)
-        if author or executor:
-            messages.add_message(request, messages.ERROR,
-                                 gettext("remove_error"))
+        user = get_object_or_404(User, id=pk)
+        form = CustomUserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("edit_success"))
             return redirect('users')
-        if user:
-            user.delete()
-            messages.add_message(request, messages.SUCCESS,
-                                 gettext("remove_success"))
+        return render(request, 'users/edit.html', {'form': form, 'user': user})
+
+
+class UsersFormDeleteView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+        return render(request, 'users/delete.html', {'user': user, 'user_id': pk})
+
+    def post(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+
+        if str(request.user.id) != str(pk):
+            messages.error(request, _("delete_permission_error"))
             return redirect('users')
+
+        has_tasks = Task.objects.filter(author_id=pk).exists() or Task.objects.filter(executor_id=pk).exists()
+        if has_tasks:
+            messages.error(request, _("remove_error"))
+            return redirect('users')
+
+        user.delete()
+        messages.success(request, _("remove_success"))
+        return redirect('users')
