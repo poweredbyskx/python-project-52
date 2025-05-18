@@ -1,0 +1,20 @@
+# General
+.DS_Store
+.env
+# Python
+*.egg-info
+__pycache__
+dist/
+*.pyc
+venv/
+.venv/
+.coverage
+coverage.xml
+.pytest_cache/
+db.sqlite3
+staticfiles/
+wsl_venv/
+.config/
+.idea/
+.vscode/
+.dbclient/

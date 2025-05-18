@@ -1,0 +1,27 @@
+{% extends "application.html" %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load i18n %}
+{% block header %}
+    <h1>{% translate 'Sign in' %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% if form.errors %}
+        <ul class="text-danger">
+        {% for field, errors in form.errors.items %}
+            {% for error in errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <form action="{% url 'login' %}" method="post" class="m-0">
+        {% bootstrap_form form %}
+        {% csrf_token %}
+        <input class="btn btn-primary" type="submit" value="{% translate 'Sign in' %}">
+    </form>
+{% endblock %}
+
+

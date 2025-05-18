@@ -1,0 +1,141 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-14 21:27+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: task_manager/tasks/forms.py:12
+#: task_manager/tasks/templates/tasks/task_filter.html:99
+msgid "status_name"
+msgstr ""
+
+#: task_manager/tasks/forms.py:13
+#: task_manager/tasks/templates/tasks/edit.html:51
+msgid "task_description"
+msgstr "Описание"
+
+#: task_manager/tasks/forms.py:14
+#: task_manager/tasks/templates/tasks/edit.html:18
+#: task_manager/tasks/templates/tasks/task_filter.html:18
+#: task_manager/tasks/templates/tasks/task_filter.html:100
+msgid "status"
+msgstr "Статус"
+
+#: task_manager/tasks/forms.py:15
+#: task_manager/tasks/templates/tasks/edit.html:57
+#: task_manager/tasks/templates/tasks/task_filter.html:51
+#: task_manager/tasks/templates/tasks/task_filter.html:102
+#: task_manager/tasks/templates/tasks/view.html:26
+msgid "executor"
+msgstr "Исполнитель"
+
+#: task_manager/tasks/forms.py:16
+msgid "labels"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/delete.html:4
+msgid "remove_task"
+msgstr "Удаление задачи"
+
+#: task_manager/tasks/templates/tasks/delete.html:8
+msgid "remove_user_confirm"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/delete.html:11
+#, fuzzy
+#| msgid "create_status_btn"
+msgid "remove_user_btn"
+msgstr "Создать задачу"
+
+#: task_manager/tasks/templates/tasks/edit.html:7
+msgid "edit_task"
+msgstr "Изменение задачи"
+
+#: task_manager/tasks/templates/tasks/edit.html:89
+#: task_manager/tasks/templates/tasks/task_filter.html:119
+#: task_manager/tasks/templates/tasks/view.html:34
+msgid "edit_user_btn"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/new.html:7
+#: task_manager/tasks/templates/tasks/task_filter.html:8
+msgid "create_task"
+msgstr "Создать задачу"
+
+#: task_manager/tasks/templates/tasks/new.html:83
+msgid "create_status_btn"
+msgstr "Создать задачу"
+
+#: task_manager/tasks/templates/tasks/task_filter.html:7
+msgid "tasks"
+msgstr "Задачи"
+
+#: task_manager/tasks/templates/tasks/task_filter.html:67
+msgid "label"
+msgstr "Метка"
+
+#: task_manager/tasks/templates/tasks/task_filter.html:89
+msgid "only_my_tasks"
+msgstr "Только свои задачи"
+
+#: task_manager/tasks/templates/tasks/task_filter.html:91
+msgid "show_btn"
+msgstr "Показать"
+
+#: task_manager/tasks/templates/tasks/task_filter.html:98
+msgid "id"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/task_filter.html:101
+#: task_manager/tasks/templates/tasks/view.html:22
+msgid "author"
+msgstr "Автор"
+
+#: task_manager/tasks/templates/tasks/task_filter.html:103
+#: task_manager/tasks/templates/tasks/view.html:30
+msgid "created_at"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/task_filter.html:104
+msgid "actions"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/task_filter.html:120
+#: task_manager/tasks/templates/tasks/view.html:35
+msgid "remove"
+msgstr ""
+
+#: task_manager/tasks/templates/tasks/view.html:4
+msgid "view_task"
+msgstr "Просмотр задачи"
+
+#: task_manager/tasks/views.py:47
+msgid "task_created"
+msgstr "Задача успешно создана"
+
+#: task_manager/tasks/views.py:88
+msgid "remove_task_error"
+msgstr "Задачу может удалить только ее автор"
+
+#: task_manager/tasks/views.py:92
+msgid "task_remove"
+msgstr "Задача успешно удалена"
+
+#~ msgid "task_edit"
+#~ msgstr "Задача успешно изменена"

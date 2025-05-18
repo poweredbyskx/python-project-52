@@ -1,0 +1,32 @@
+{% extends "application.html" %}
+{% load i18n %}
+{% block header %}
+    <h1>{% translate 'Labels' %}</h1>
+    <a href="{% url 'labels:new_label' %}" class="btn btn-primary me-1">{% translate 'Create label' %}</a>
+{% endblock %}
+
+{% block content %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{% translate 'ID' %}</th>
+                <th>{% translate 'Status name' %}</th>
+                <th>{% translate 'Created at' %}</th>
+                <th>{% translate 'Actions' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for label in values %}
+                <tr>
+                    <td>{{ label.id }}</td>
+                    <td>{{ label.name }}</td>
+                    <td>{{ label.created_at }}</td>
+                    <td class="d-flex">
+                        <a href="{% url 'labels:edit_label' pk=label.id %}" class="btn btn-primary me-1">{% translate 'Edit user' %}</a>
+                        <a href="{% url 'labels:drop_label' pk=label.id %}" class="btn btn-primary me-1">{% translate 'Remove' %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
