@@ -13,6 +13,10 @@
         {% for field in form %}
             {% bootstrap_field field %}
         {% endfor %}
+
+        <input type="hidden" id="id_password1" name="password1">
+        <input type="hidden" id="id_password2" name="password2">
+
         <input class='btn btn-primary' type="submit" value="{% translate 'edit_user_btn' %}">
     </form>
 {% endblock %}

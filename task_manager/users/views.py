@@ -79,8 +79,6 @@ class UsersFormCreateView(View):
         return render(request, 'registration/register.html', context)
 
 
-
-
 class UsersFormEditView(View):
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -104,7 +102,6 @@ class UsersFormEditView(View):
             messages.success(request, gettext("edit_success"))
             return redirect('users')
         return render(request, 'users/edit.html', {'form': user_form, 'user': user})
-
 
 
 class UsersFormDeleteView(View):
