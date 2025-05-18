@@ -8,7 +8,16 @@ from django.utils.translation import gettext
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
+from .forms import CustomAuthForm
 
+class MyLoginView(LoginView):
+    template_name = "registration/login.html"
+    authentication_form = CustomAuthForm
+
+class MyLoginView(LoginView):
+    template_name = "registration/login.html"
+    authentication_form = CustomAuthForm
 
 class LogoutView(View):
     def get(self, request):
