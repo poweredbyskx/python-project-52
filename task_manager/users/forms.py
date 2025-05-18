@@ -11,8 +11,8 @@ class CustomUserCreationForm(DjangoUserCreationForm):
                   'password1', 'password2']
 
 
+
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username']
-
