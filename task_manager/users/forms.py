@@ -1,17 +1,49 @@
-from django.contrib.auth.forms import UserCreationForm as DjangoUserCreationForm
+from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserChangeForm
 
 User = get_user_model()
 
-class CustomUserCreationForm(DjangoUserCreationForm):
-    class Meta(DjangoUserCreationForm.Meta):
-        model = User
-        fields = ['first_name', 'last_name', 'username']
 
+class CustomUserCreationForm(UserCreationForm):
+    password1 = forms.CharField(
+        label='Пароль',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Пароль',
+        }),
+    )
+    password2 = forms.CharField(
+        label='Подтвердите пароль',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Подтвердите пароль',
+        }),
+    )
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password1', 'password2']
 
 
 class CustomUserChangeForm(UserChangeForm):
-    class Meta:
+    password1 = forms.CharField(
+        label='Пароль',
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Пароль',
+        }),
+    )
+    password2 = forms.CharField(
+        label='Подтвердите пароль',
+        required=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Подтвердите пароль',
+        }),
+    )
+
+    class Meta(UserChangeForm.Meta):
         model = User
-        fields = ['first_name', 'last_name', 'username']
+        fields = ['first_name', 'last_name', 'username', 'password1', 'password2']
