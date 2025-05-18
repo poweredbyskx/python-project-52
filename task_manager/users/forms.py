@@ -1,16 +1,37 @@
-from django.urls import path
-from .views import MyLoginView, SignUpView, ProfileView
-from django.contrib.auth import views as auth_views
+from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from django.contrib.auth import get_user_model
 
-app_name = 'users'
+User = get_user_model()
 
-urlpatterns = [
-    # Пользовательская вьюшка входа с кастомной формой
-    path('login/', MyLoginView.as_view(), name='login'),
-    # Выход
-    path('logout/', auth_views.LogoutView.as_view(next_page='users:login'), name='logout'),
-    # Регистрация нового пользователя
-    path('signup/', SignUpView.as_view(), name='signup'),
-    # Страница профиля
-    path('profile/', ProfileView.as_view(), name='profile'),
-]
+class CustomUserCreationForm(UserCreationForm):
+    """Form for creating new users"""
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "email")
+
+class CustomUserChangeForm(UserChangeForm):
+    """Form for updating existing users"""
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "email")
+
+class CustomAuthForm(AuthenticationForm):
+    """Authentication form with Russian placeholders"""
+    username = forms.CharField(
+        label="Имя пользователя",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Имя пользователя",
+            "class": "form-control",
+            "id": "id_username",
+        }),
+    )
+    password = forms.CharField(
+        label="Пароль",
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Пароль",
+            "class": "form-control",
+            "id": "id_password",
+        }),
+    )
