@@ -5,7 +5,7 @@
 {% load i18n %}
 
 {% block header %}
-    <h1>{% translate 'Sign up' %}</h1>
+    <h1>{% translate 'Регистрация' %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -28,6 +28,6 @@
     <form action="{% url 'users:new_user' %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input class="btn btn-primary" type="submit" value="{% translate 'Sign up' %}">
+        <input class="btn btn-primary" type="submit" value="{% translate 'Регистрация' %}">
     </form>
 {% endblock %}

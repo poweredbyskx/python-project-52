@@ -4,7 +4,7 @@
 {% bootstrap_javascript %}
 {% load i18n %}
 {% block header %}
-    <h1>{% translate 'Sign in' %}</h1>
+    <h1>{% translate 'Вход' %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -20,7 +20,7 @@
     <form action="{% url 'login' %}" method="post" class="m-0">
         {% bootstrap_form form %}
         {% csrf_token %}
-        <input class="btn btn-primary" type="submit" value="{% translate 'Sign in' %}">
+        <input class="btn btn-primary" type="submit" value="{% translate 'Вход' %}">
     </form>
 {% endblock %}
 
