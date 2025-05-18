@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'new_user' %}" method="post" class="m-0">
+    <form action="{% url 'users:new_user' %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
         <input class='btn btn-primary' type="submit" value="{% translate 'sign_up_btn' %}">
