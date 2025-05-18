@@ -3,15 +3,16 @@
 {% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 {% block header %}
-    <h1>{% translate 'Изменить' %}</h1>
+    <h1>{% translate 'edit_user' %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'users:patch_user' pk=user.id %}" method="post" class="m-0">
+    <form action="{% url 'patch_user' pk=user_id %}" method="post" class="m-0">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        <input class="btn btn-primary" type="submit" value="{% translate 'Изменить' %}">
+        {% for field in form %}
+            {% bootstrap_field field %}
+        {% endfor %}
+        <input class='btn btn-primary' type="submit" value="{% translate 'edit_user_btn' %}">
     </form>
 {% endblock %}

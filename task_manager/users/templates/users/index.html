@@ -1,18 +1,18 @@
 {% extends "application.html" %}
 {% load i18n %}
 {% block header %}
-    <h1>{% translate 'Пользователи' %}</h1>
+    <h1>{% translate 'app_users' %}</h1>
 {% endblock %}
 
 {% block content %}
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>{% translate 'ID' %}</th>
-                <th>{% translate 'Имя' %}</th>
-                <th>{% translate 'Фамилия' %}</th>
-                <th>{% translate 'Создан' %}</th>
-                <th>{% translate 'Действия' %}</th>
+                <th>{% translate 'id' %}</th>
+                <th>{% translate 'user_name' %}</th>
+                <th>{% translate 'full_name' %}</th>
+                <th>{% translate 'created_at' %}</th>
+                <th>{% translate 'actions' %}</th>
             </tr>
         </thead>
         <tbody>
@@ -20,11 +20,11 @@
                 <tr>
                     <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
-                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <td>{{ user.first_name}} {{user.last_name }}</td>
                     <td>{{ user.date_joined }}</td>
                     <td class="d-flex">
-                        <a href="{% url 'users:patch_user' pk=user.id %}" class="btn btn-primary me-1">{% translate 'Изменить' %}</a>
-                        <a href="{% url 'users:drop_user' pk=user.id %}" class="btn btn-primary me-1">{% translate 'Удалить' %}</a>
+                        <a href="{% url 'users' %}{{ user.id }}/update/" class="btn btn-primary me-1">{% translate 'edit_user_btn' %}</a>
+                        <a href="{% url 'users' %}{{ user.id }}/delete/" class="btn btn-primary me-1">{% translate 'remove' %}</a>
                     </td>
                 </tr>
             {% endfor %}

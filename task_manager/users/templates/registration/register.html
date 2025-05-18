@@ -3,31 +3,14 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load i18n %}
-
 {% block header %}
-    <h1>{% translate 'Регистрация' %}</h1>
+    <h1>{% translate 'sign_up' %}</h1>
 {% endblock %}
 
 {% block content %}
-
-    {% if form.errors %}
-      <div class="alert alert-danger">
-        <ul class="mb-0">
-          {% for field in form %}
-            {% for error in field.errors %}
-              <li><strong>{{ field.label }}:</strong> {{ error }}</li>
-            {% endfor %}
-          {% endfor %}
-          {% for error in form.non_field_errors %}
-            <li>{{ error }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %}
-
-    <form action="{% url 'users:new_user' %}" method="post" class="m-0">
+    <form action="{% url 'new_user' %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input class="btn btn-primary" type="submit" value="{% translate 'Регистрация' %}">
+        <input class='btn btn-primary' type="submit" value="{% translate 'sign_up_btn' %}">
     </form>
 {% endblock %}

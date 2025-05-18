@@ -3,13 +3,12 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% load i18n %}
-
 {% block header %}
-    <h1>{% translate 'Создать' %}</h1>
+    <h1>{% translate 'create_task' %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'tasks:create' %}" method="post" class="m-0">
+    <form action="{% url 'new_task' %}" method="post" class="m-0">
         {% csrf_token %}
         {% for field in form %}
             {% if field.name == 'name' %}
@@ -17,35 +16,70 @@
             {% elif field.name == 'status' %}
                 <div class="mb-3">
                     <label class="form-label" for="id_status">{{ field.label }}</label>
-                    {% if field.errors %}
-                        <select name="{{ field.name }}" class="form-select is-invalid" id="id_{{ field.name }}">
-                            <option value="">{% translate '--------- ' %}</option>
-                            {% for status in field.field.queryset %}
-                                <option value="{{ status.pk }}" {% if field.value|stringformat:"s" == status.pk|stringformat:"s" %}selected{% endif %}>
-                                    {{ status.name }}
-                                </option>
-                            {% endfor %}
+                    {% if field.errors  %}
+                        <select name="{{ field.name }}" class="form-select is-invalid" id="id_{{field.name }}">
+                            {% if field.field.queryset.exists %}
+                                <option value="">---------</option>
+                                {% for status in field.field.queryset %}
+                                    <option value="{{ status.pk }}">{{ status.name }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="">---------</option>
+                            {% endif %}
                         </select>
                         {% for error in field.errors %}
                             <div class="invalid-feedback">{{ error|escape }}</div>
                         {% endfor %}
-                    {% else %}
-                        <select name="{{ field.name }}" class="form-select" id="id_{{ field.name }}">
-                            <option value="">{% translate '--------- ' %}</option>
-                            {% for status in field.field.queryset %}
-                                <option value="{{ status.pk }}" {% if field.value|stringformat:"s" == status.pk|stringformat:"s" %}selected{% endif %}>
-                                    {{ status.name }}
-                                </option>
-                            {% endfor %}
+                    {% else  %}
+                        <select name="{{ field.name }}" class="form-select" id="id_{{field.name }}">
+                            {% if field.field.queryset.exists %}
+                                <option value="">---------</option>
+                                {% for status in field.field.queryset %}
+                                    <option value="{{ status.pk }}">{{ status.name }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option value="">---------</option>
+                            {% endif %}
                         </select>
                     {% endif %}
                 </div>
             {% elif field.name == 'description' %}
+                <div class="mb-3">
+                    {{ field.errors }}
+                    <label class="form-label" for="id_description">{{ field.label }}</label>
+                    <textarea name="{{field.name }}" class="form-control" id="id_{{field.name }}" rows="10"></textarea>
+                </div>
+            {% elif field.name == 'executor' %}
+                <div class="mb-3">
+                    {{ field.errors }}
+                    <label class="form-label" for="id_executor">{{ field.label }}</label>
+                    <select name="{{ field.name }}" class="form-select" id="id_{{ field.name }}">
+                        {% if field.field.queryset.exists %}
+                            <option value="">---------</option>
+                            {% for user in field.field.queryset %}
+                                <option value="{{ user.pk }}">{{ user.first_name}} {{user.last_name }}</option>
+                            {% endfor %}
+                        {% else %}
+                            <option value="">---------</option>
+                        {% endif %}
+                    </select>
+                </div>
+            {% elif field.name == 'author' %}
                 {% bootstrap_field field %}
-            {% else %}
-                {% bootstrap_field field %}
+            {% else  %}
+                <div class="mb-3">
+                    {{ field.errors }}
+                    <label class="form-label" for="id_labels">{{ field.label }}</label>
+                    <select name="{{ field.name }}" class="form-select" id="id_{{ field.name }}" multiple>
+                        {% if field.field.queryset.exists %}
+                            {% for label in field.field.queryset %}
+                                <option value="{{ label.pk }}">{{ label.name}}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
             {% endif %}
         {% endfor %}
-        <button type="submit" class="btn btn-primary">{% translate 'Создать' %}</button>
+        <input class='btn btn-primary' type="submit" value="{% translate 'create_status_btn' %}">
     </form>
 {% endblock %}
