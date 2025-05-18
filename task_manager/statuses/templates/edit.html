@@ -4,13 +4,13 @@
 {% bootstrap_javascript %}
 {% load i18n %}
 {% block header %}
-    <h1>{% translate 'Edit status' %}</h1>
+    <h1>{% translate 'Изменить' %}</h1>
 {% endblock %}
 
 {% block content %}
     <form action="{% url 'statuses:edit_status' pk=status_id %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input class='btn btn-primary' type="submit" value="{% translate 'Edit user' %}">
+        <input class='btn btn-primary' type="submit" value="{% translate 'Изменить' %}">
     </form>
 {% endblock %}

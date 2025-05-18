@@ -5,16 +5,16 @@
 {% load i18n %}
 
 {% block header %}
-    <h1>{% translate 'Create task' %}</h1>
+    <h1>{% translate 'Создать' %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'tasks:new_task' %}" method="post" class="m-0">
+    <form action="{% url 'tasks:create' %}" method="post" class="m-0">
         {% csrf_token %}
         {% for field in form %}
             {% if field.name == 'name' %}
                 {% bootstrap_field field %}
-            {% elif field.name == 'Status' %}
+            {% elif field.name == 'status' %}
                 <div class="mb-3">
                     <label class="form-label" for="id_status">{{ field.label }}</label>
                     {% if field.errors %}
@@ -46,6 +46,6 @@
                 {% bootstrap_field field %}
             {% endif %}
         {% endfor %}
-        <button type="submit" class="btn btn-primary">{% translate 'create_task' %}</button>
+        <button type="submit" class="btn btn-primary">{% translate 'Создать' %}</button>
     </form>
 {% endblock %}

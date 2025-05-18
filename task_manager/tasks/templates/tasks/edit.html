@@ -5,7 +5,7 @@
 {% load i18n %}
 
 {% block header %}
-    <h1>{% translate 'edit_task' %}</h1>
+    <h1>{% translate 'Изменить' %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -17,7 +17,7 @@
             
             {% elif field.name == 'status' %}
                 <div class="mb-3">
-                    <label class="form-label" for="id_status">{% translate 'status' %}</label>
+                    <label class="form-label" for="id_status">{% translate 'Изменить' %}</label>
                     {% if field.errors %}
                         <select name="{{ field.name }}" class="form-select is-invalid" id="id_{{ field.name }}">
                             <option value="">{% translate '---------' %}</option>
@@ -42,7 +42,7 @@
                     {% endif %}
                 </div>
 
-            {% elif field.name == 'description' %}
+            {% elif field.name == 'Описание' %}
                 <div class="mb-3">
                     {% if field.errors %}
                         <div class="invalid-feedback d-block">
@@ -51,7 +51,7 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <label class="form-label" for="id_description">{% translate 'task_description' %}</label>
+                    <label class="form-label" for="id_description">{% translate 'Описание заметки' %}</label>
                     <textarea name="{{ field.name }}" class="form-control{% if field.errors %} is-invalid{% endif %}" id="id_{{ field.name }}" rows="10">{{ field.value }}</textarea>
                 </div>
 
@@ -64,7 +64,7 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                    <label class="form-label" for="id_executor">{% translate 'executor' %}</label>
+                    <label class="form-label" for="id_executor">{% translate 'Управление' %}</label>
                     <select name="{{ field.name }}" class="form-select{% if field.errors %} is-invalid{% endif %}" id="id_{{ field.name }}">
                         <option value="">{% translate '---------' %}</option>
                         {% for user in field.field.queryset %}
@@ -95,6 +95,6 @@
                 </div>
             {% endif %}
         {% endfor %}
-        <input class="btn btn-primary" type="submit" value="{% translate 'edit_user_btn' %}">
+        <input class="btn btn-primary" type="submit" value="{% translate 'Изменить' %}">
     </form>
 {% endblock %}

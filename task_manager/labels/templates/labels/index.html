@@ -1,8 +1,8 @@
 {% extends "application.html" %}
 {% load i18n %}
 {% block header %}
-    <h1>{% translate 'Labels' %}</h1>
-    <a href="{% url 'labels:new_label' %}" class="btn btn-primary me-1">{% translate 'Create label' %}</a>
+    <h1>{% translate 'Заметки' %}</h1>
+    <a href="{% url 'labels:new_label' %}" class="btn btn-primary me-1">{% translate 'Создать' %}</a>
 {% endblock %}
 
 {% block content %}
@@ -10,9 +10,9 @@
         <thead>
             <tr>
                 <th>{% translate 'ID' %}</th>
-                <th>{% translate 'Status name' %}</th>
-                <th>{% translate 'Created at' %}</th>
-                <th>{% translate 'Actions' %}</th>
+                <th>{% translate 'Имя' %}</th>
+                <th>{% translate 'Создан' %}</th>
+                <th>{% translate 'Действия' %}</th>
             </tr>
         </thead>
         <tbody>
@@ -22,8 +22,8 @@
                     <td>{{ label.name }}</td>
                     <td>{{ label.created_at }}</td>
                     <td class="d-flex">
-                        <a href="{% url 'labels:edit_label' pk=label.id %}" class="btn btn-primary me-1">{% translate 'Edit user' %}</a>
-                        <a href="{% url 'labels:drop_label' pk=label.id %}" class="btn btn-primary me-1">{% translate 'Remove' %}</a>
+                        <a href="{% url 'labels:edit_label' pk=label.id %}" class="btn btn-primary me-1">{% translate 'Изменить' %}</a>
+                        <a href="{% url 'labels:drop_label' pk=label.id %}" class="btn btn-primary me-1">{% translate 'Удалить' %}</a>
                     </td>
                 </tr>
             {% endfor %}

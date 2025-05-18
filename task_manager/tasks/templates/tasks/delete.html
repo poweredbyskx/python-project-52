@@ -2,13 +2,13 @@
 {% load i18n %}
 
 {% block header %}
-    <h1>{% translate 'Remove task' %}</h1>
+    <h1>{% translate 'Удалить' %}</h1>
 {% endblock %}
 
 {% block content %}
-    <p>{% translate 'Remove task confirm' %} "{{ task.name }}"?</p>
+    <p>{% translate 'Удалить' %} "{{ task.name }}"?</p>
     <form action="{% url 'drop_task' pk=task.pk %}" method="post" class="m-0">
         {% csrf_token %}
-        <input class="btn btn-danger" type="submit" value="{% translate 'Remove task' %}">
+        <input class="btn btn-danger" type="submit" value="{% translate 'Удалить' %}">
     </form>
 {% endblock %}
