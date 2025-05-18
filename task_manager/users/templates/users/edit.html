@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'patch_user' pk=user_id %}" method="post" class="m-0">
+    <form action="{% url 'user_update' pk=user_id %}" method="post" class="m-0">
         {% csrf_token %}
         {% for field in form %}
             {% bootstrap_field field %}
