@@ -1,12 +1,16 @@
 from django.urls import path
-from .views import MyLoginView, SignUpView, ProfileView
-from django.contrib.auth import views as auth_views
+from task_manager.users.views import (
+    UsersView,
+    UsersFormCreateView,
+    UsersFormEditView,
+    UsersFormDeleteView,
+)
 
 app_name = 'users'
 
 urlpatterns = [
-    path('login/', MyLoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='users:login'), name='logout'),
-    path('signup/', SignUpView.as_view(), name='signup'),
-    path('profile/', ProfileView.as_view(), name='profile'),
+    path('', UsersView.as_view(), name='users'),
+    path('create/', UsersFormCreateView.as_view(), name='new_user'),
+    path('<int:pk>/update/', UsersFormEditView.as_view(), name='patch_user'),
+    path('<int:pk>/delete/', UsersFormDeleteView.as_view(), name='drop_user'),
 ]
