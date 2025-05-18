@@ -6,9 +6,8 @@
 {% block header %}
     <h1>{% translate 'create_status' %}</h1>
 {% endblock %}
-
 {% block content %}
-    <form action="{% url 'new_status' %}" method="post" class="m-0">
+    <form action="{% url 'statuses:new_status' %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
         <input class='btn btn-primary' type="submit" value="{% translate 'create_status_btn' %}">

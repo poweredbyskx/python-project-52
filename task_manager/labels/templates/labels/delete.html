@@ -1,13 +1,12 @@
 {% extends "application.html" %}
 {% load i18n %}
 {% block header %}
-    <h1>{% translate 'remove_label' %}</h1>
+    <h1>{% trans 'remove_label' %}</h1>
 {% endblock %}
-
 {% block content %}
-    <p>{% translate 'remove_user_confirm' %} {{ value.name}}?</p>
-    <form action="{% url 'drop_label' pk=value_id %}" method="post" class="m-0">
+    <p>{% trans 'remove_label_confirm' %} {{ value.name }}?</p>
+    <form action="{% url 'labels:drop_label' pk=value.id %}" method="post" class="m-0">
         {% csrf_token %}
-        <input class='btn btn-danger' type="submit" value="{% translate 'remove_user_btn' %}">
+        <input class="btn btn-danger" type="submit" value="{% trans 'remove_label_btn' %}">
     </form>
 {% endblock %}

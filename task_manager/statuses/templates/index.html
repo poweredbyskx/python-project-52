@@ -1,10 +1,10 @@
+
 {% extends "application.html" %}
 {% load i18n %}
 {% block header %}
     <h1>{% translate 'statuses' %}</h1>
-    <a href="{% url 'new_status' %}" class="btn btn-primary me-1">{% translate 'create_status' %}</a>
+    <a href="{% url 'statuses:new_status' %}" class="btn btn-primary me-1">{% translate 'create_status' %}</a>
 {% endblock %}
-
 {% block content %}
     <table class="table table-striped">
         <thead>
@@ -16,14 +16,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for status in values %}
+            {% for status in statuses %}
                 <tr>
                     <td>{{ status.id }}</td>
                     <td>{{ status.name }}</td>
                     <td>{{ status.created_at }}</td>
                     <td class="d-flex">
-                        <a href="{% url 'statuses' %}{{ status.id }}/update/" class="btn btn-primary me-1">{% translate 'edit_user_btn' %}</a>
-                        <a href="{% url 'statuses' %}{{ status.id }}/delete/" class="btn btn-primary me-1">{% translate 'remove' %}</a>
+                        <a href="{% url 'statuses:edit_status' pk=status.id %}" class="btn btn-primary me-1">
+                            {% translate 'edit_user_btn' %}
+                        </a>
+                        <a href="{% url 'statuses:drop_status' pk=status.id %}" class="btn btn-primary me-1">
+                            {% translate 'remove' %}
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
