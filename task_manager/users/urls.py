@@ -1,5 +1,5 @@
 from django.urls import path
-from your_app.views import MyLoginView
+from task_manager.users.views import MyLoginView
 from task_manager.users.views import (
     UsersView,
     UsersFormCreateView,
