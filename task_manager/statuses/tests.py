@@ -1,35 +1,36 @@
-import unittest
-from django.test import Client
+from django.test import TestCase, Client
+from django.urls import reverse
 from task_manager.statuses.models import Status
+from django.contrib.auth.models import User
 import datetime
 
-
-class StatusCRUDTest(unittest.TestCase):
+class StatusCRUDTest(TestCase):
     fixtures = ['statuses.json']
 
     def setUp(self):
         self.client = Client()
+        # Создаем и логиним пользователя, если нужно
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.client.login(username='testuser', password='12345')
 
     def test_create(self):
-        response = self.client.post('/statuses/create/', {'name': 'новый1'})
+        response = self.client.post(reverse('statuses:create'), {'name': 'новый1'})
         self.assertEqual(response.status_code, 302)
         status = Status.objects.get(name="новый1")
-        self.assertEqual(status.created_at, datetime.datetime(2024, 4, 22, 12,
-                                                              47, 6, 771409,
-                                                              tzinfo=datetime
-                                                              .timezone.utc))
+        self.assertIsInstance(status.created_at, datetime.datetime)
+        # Если нужно, проверить timezone-aware:
+        self.assertIsNotNone(status.created_at.tzinfo)
 
     def test_read(self):
-        response = self.client.get('/statuses/')
-        self.assertEqual(response.status_code, 302)
+        response = self.client.get(reverse('statuses:list'))
+        self.assertEqual(response.status_code, 200)
         status = Status.objects.get(name="новый1")
-        self.assertEqual(status.created_at, datetime.datetime(2024, 4, 22, 12,
-                                                              47, 6, 771409,
-                                                              tzinfo=datetime
-                                                              .timezone.utc))
+        self.assertIsInstance(status.created_at, datetime.datetime)
 
     def test_update(self):
-        response = self.client.post('/statuses/2/update/', {'name': 'новый2'})
+        # Обновляем статус с id=2 из фикстуры
+        response = self.client.post(reverse('statuses:update', args=[2]), {'name': 'новый2'})
         self.assertEqual(response.status_code, 302)
-        status = Status.objects.get(name="новый2")
-        self.assertTrue(status.created_at)
+        status = Status.objects.get(pk=2)
+        self.assertEqual(status.name, 'новый2')
+        self.assertIsInstance(status.created_at, datetime.datetime)

@@ -5,38 +5,38 @@ from task_manager.statuses.models import Status
 from django.contrib.auth.models import User
 
 class TasksCRUDTest(TestCase):
-    fixtures = ['tasks.json']  # Если у тебя есть фикстура tasks.json с тестовыми данными
-
     def setUp(self):
         self.client = Client()
-        # Создаем тестового пользователя и логинимся
         self.user = User.objects.create_user(username='testuser', password='12345')
         self.client.login(username='testuser', password='12345')
 
+        # Создаем статус для тестов
+        self.status1 = Status.objects.create(name='Status 1')
+        self.status6 = Status.objects.create(name='Status 6')
+
+        # Создаем задачу для чтения
+        self.task = Task.objects.create(name='tota', status=self.status1, author=self.user)
+
     def test_create(self):
-        # Используем reverse для получения URL
-        url = reverse('tasks:create')  # или укажи правильный неймспейс и имя url
-        response = self.client.post(url, {'name': 'tota', 'status': 1})
-        # Проверяем, что редирект (создание прошло успешно)
+        url = reverse('tasks:create')
+        response = self.client.post(url, {'name': 'new task', 'status': self.status1.id})
         self.assertEqual(response.status_code, 302)
 
-        # Проверяем, что задача создалась и у неё статус с id=1 (статус с id=6 не обязателен)
-        task = Task.objects.get(name="tota")
-        self.assertEqual(task.status.id, 1)
+        task = Task.objects.get(name='new task')
+        self.assertEqual(task.status, self.status1)
 
     def test_read(self):
-        url = reverse('tasks:list')  # или укажи правильный url
+        url = reverse('tasks:list')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)  # Теперь 200, а не 302
+        self.assertEqual(response.status_code, 200)
 
-        # Проверим, что в базе есть задача с именем из фикстуры
-        task = Task.objects.get(name="tota")
+        task = Task.objects.get(name='tota')
         self.assertIsNotNone(task)
 
     def test_read_filters(self):
         url = reverse('tasks:list')
-        response = self.client.get(url, {'status': 6})
+        response = self.client.get(url, {'status': self.status6.id})
         self.assertEqual(response.status_code, 200)
 
-        tasks = Task.objects.filter(status_id=6)
+        tasks = Task.objects.filter(status=self.status6)
         self.assertTrue(tasks.exists())
