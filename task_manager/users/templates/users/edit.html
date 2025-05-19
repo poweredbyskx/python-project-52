@@ -3,21 +3,51 @@
 {% load django_bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+
 {% block header %}
-    <h1>{% translate 'edit_user' %}</h1>
+  <h1>{% translate 'edit_user' %}</h1>
 {% endblock %}
 
 {% block content %}
-    <form action="{% url 'users:user_update' pk=user.id %}" method="post" class="m-0">
-        {% csrf_token %}
-        {% for field in form %}
-            {% bootstrap_field field %}
-        {% endfor %}
+  <form action="{% url 'users:user_update' pk=user.id %}" method="post" class="m-0">
+    {% csrf_token %}
 
-	<label for="id_password">Пароль</label>
-        <input id="id_password" name="password" type="password" />
+    {# Стандартные поля #}
+    {% bootstrap_field form.first_name %}
+    {% bootstrap_field form.last_name %}
+    {% bootstrap_field form.username %}
 
+    {# Поле: Новый пароль #}
+    <div class="mb-3">
+      <label class="form-label" for="id_password1">{% translate "Password" %}</label>
+      <input type="password"
+             name="password1"
+             id="id_password1"
+             class="form-control"
+             placeholder="Пароль"
+             autocomplete="new-password"
+             aria-describedby="id_password1_helptext">
+      <div class="form-text" id="id_password1_helptext">
+        {% if form.password1.help_text %}{{ form.password1.help_text }}{% endif %}
+      </div>
+    </div>
 
-        <input class='btn btn-primary' type="submit" value="{% translate 'edit_user_btn' %}">
-    </form>
+    {# Поле: Подтверждение пароля #}
+    <div class="mb-3">
+      <label class="form-label" for="id_password2">{% translate "Confirm password" %}</label>
+      <input type="password"
+             name="password2"
+             id="id_password2"
+             class="form-control"
+             placeholder="Подтверждение пароля"
+             autocomplete="new-password"
+             aria-describedby="id_password2_helptext">
+      <div class="form-text" id="id_password2_helptext">
+        {% if form.password2.help_text %}{{ form.password2.help_text }}{% endif %}
+      </div>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="{% translate 'edit_user_btn' %}">
+  </form>
 {% endblock %}
+

@@ -68,7 +68,7 @@ class UsersFormEditView(LoginRequiredMixin, View):
     def get(self, request, pk):
         if str(request.user.id) != str(pk):
             messages.error(request, _("edit_error"))
-            return redirect('users')
+            return redirect('users:users')
 
         user = get_object_or_404(User, id=pk)
         form = CustomUserChangeForm(instance=user)
@@ -77,7 +77,7 @@ class UsersFormEditView(LoginRequiredMixin, View):
     def post(self, request, pk):
         if str(request.user.id) != str(pk):
             messages.error(request, _("edit_error"))
-            return redirect('users')
+            return redirect('users:users')
 
         user = get_object_or_404(User, id=pk)
         form = CustomUserChangeForm(request.POST, instance=user)
@@ -98,13 +98,13 @@ class UsersFormDeleteView(LoginRequiredMixin, View):
 
         if str(request.user.id) != str(pk):
             messages.error(request, _("delete_permission_error"))
-            return redirect('users')
+            return redirect('users:users')
 
         has_tasks = Task.objects.filter(author_id=pk).exists() or Task.objects.filter(executor_id=pk).exists()
         if has_tasks:
             messages.error(request, _("remove_error"))
-            return redirect('users')
+            return redirect('users:users')
 
         user.delete()
         messages.success(request, _("remove_success"))
-        return redirect('users')
+        return redirect('users:users')
