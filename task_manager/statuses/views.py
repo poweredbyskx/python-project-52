@@ -29,7 +29,7 @@ class StatusesFormCreateView(LoginRequiredMixin, View):
             form.save()
             status_created = gettext("status_created")
             messages.add_message(request, messages.SUCCESS, status_created)
-            return redirect('statuses:list')  # <-- исправлено
+            return redirect('statuses:list')
         context = {
             'form': form
         }
@@ -51,8 +51,6 @@ class StatusFormEditView(LoginRequiredMixin, View, StatusEditForm, EditView):
         form = StatusCreationForm(instance=status)
         return render(request, 'edit.html',
                       {'form': form, 'status_id': status_id})
-    # здесь, если используете redirect, тоже указывайте 'statuses:list'
-
 
 class StatusForm:
     value = Status
@@ -60,18 +58,17 @@ class StatusForm:
 
 
 class StatusFormDeleteView(LoginRequiredMixin, View, StatusForm, DeleteView):
-    # Удаляем pass, т.к. ниже есть реализация post
     def post(self, request, *args, **kwargs):
         status_id = kwargs.get('pk')
         status = Status.objects.get(id=status_id)
         task = Task.objects.filter(status_id=status_id)
-        if task.exists():  # лучше так проверить наличие
+        if task.exists():
             messages.add_message(request, messages.ERROR,
-                                 gettext("status_error"))
-            return redirect('statuses:list')  # <-- исправлено
+                                 gettext('status_error'))
+            return redirect('statuses:list')
         if status:
             status.delete()
             status_remove = gettext("status_remove")
             messages.add_message(request, messages.SUCCESS, status_remove)
-            return redirect('statuses:list')  # <-- исправлено
+            return redirect('statuses:list')
 
