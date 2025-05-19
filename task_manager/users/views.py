@@ -84,7 +84,7 @@ class UsersFormEditView(LoginRequiredMixin, View):
         if form.is_valid():
             form.save()
             messages.success(request, _("edit_success"))
-            return redirect('users')
+            return redirect('users:users')
         return render(request, 'users/edit.html', {'form': form, 'user': user})
 
 
