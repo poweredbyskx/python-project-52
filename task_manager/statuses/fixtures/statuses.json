@@ -2,16 +2,25 @@
   {
     "model": "statuses.status",
     "pk": 1,
-    "fields": { "name": "Open" }
+    "fields": {
+      "name": "Open",
+      "created_at": "2025-05-19T00:00:00Z"
+    }
   },
   {
     "model": "statuses.status",
     "pk": 2,
-    "fields": { "name": "In Progress" }
+    "fields": {
+      "name": "In Progress",
+      "created_at": "2025-05-19T00:00:00Z"
+    }
   },
   {
     "model": "statuses.status",
     "pk": 3,
-    "fields": { "name": "Completed" }
+    "fields": {
+      "name": "Completed",
+      "created_at": "2025-05-19T00:00:00Z"
+    }
   }
 ]
