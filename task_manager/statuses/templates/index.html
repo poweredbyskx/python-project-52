@@ -9,6 +9,13 @@
 
 {% block content %}
     {% bootstrap_messages %}
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-success" role="alert">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
 
     <table class="table table-striped">
         <thead>
