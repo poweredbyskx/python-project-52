@@ -1,10 +1,15 @@
 {% extends "application.html" %}
 {% load i18n %}
+{% load django_bootstrap5 %}
+
 {% block header %}
     <h1>{% translate 'statuses' %}</h1>
     <a href="{% url 'statuses:new_status' %}" class="btn btn-primary me-1">{% translate 'create_status' %}</a>
 {% endblock %}
+
 {% block content %}
+    {% bootstrap_messages %}
+
     <table class="table table-striped">
         <thead>
             <tr>
