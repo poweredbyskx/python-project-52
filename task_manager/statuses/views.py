@@ -58,7 +58,7 @@ class StatusFormEditView(LoginRequiredMixin, View, StatusEditForm, EditView):
         form = StatusCreationForm(request.POST, instance=status)
         if form.is_valid():
             form.save()
-            messages.success(request, gettext("status_edit"))
+            messages.success(request, gettext("Статус успешно изменен"))
             return redirect('statuses:list')
         return render(request, 'edit.html', {'form': form, 'status_id': status_id})
 
