@@ -9,6 +9,6 @@
     <form action="{% url 'labels:new_label' %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input class="btn btn-primary" type="submit" value="{% trans 'create_label_btn' %}">
+        <input class="btn btn-primary" type="submit" value="{% trans 'Создать' %}">
     </form>
 {% endblock %}
