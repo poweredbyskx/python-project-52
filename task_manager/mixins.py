@@ -19,13 +19,10 @@ class DeleteView:
 
 class EditView:
     def post(self, request, *args, **kwargs):
-        value_id = kwargs.get('pk')
-        value = self.value.objects.get(id=value_id)
-        form = self.form(request.POST, instance=value)
+        obj = self.value.objects.get(pk=kwargs.get('pk'))
+        form = self.form(request.POST, instance=obj)
         if form.is_valid():
             form.save()
-            value_edit = gettext(self.text)
-            messages.add_message(request, messages.SUCCESS, value_edit)
+            messages.success(request, _(self.text))
             return redirect(self.path)
-        return render(request, self.template,
-                      {'form': form, 'value_id': value_id})
+        return render(request, self.template, {'form': form})
