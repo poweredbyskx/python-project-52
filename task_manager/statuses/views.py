@@ -41,7 +41,7 @@ class StatusEditForm:
     template = 'edit.html'
     form = StatusCreationForm
     text = 'status_edit'
-    path = 'statuses'
+    path = 'statuses:list'
 
 
 class StatusFormEditView(LoginRequiredMixin, View, StatusEditForm, EditView):
