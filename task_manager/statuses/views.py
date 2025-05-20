@@ -52,6 +52,17 @@ class StatusFormEditView(LoginRequiredMixin, View, StatusEditForm, EditView):
         return render(request, 'edit.html',
                       {'form': form, 'status_id': status_id})
 
+    def post(self, request, *args, **kwargs):
+        status_id = kwargs.get('pk')
+        status = Status.objects.get(id=status_id)
+        form = StatusCreationForm(request.POST, instance=status)
+        if form.is_valid():
+            form.save()
+            messages.success(request, gettext("status_edit"))
+            return redirect('statuses:list')
+        return render(request, 'edit.html', {'form': form, 'status_id': status_id})
+
+
 class StatusForm:
     value = Status
     template = 'delete.html'
@@ -71,4 +82,3 @@ class StatusFormDeleteView(LoginRequiredMixin, View, StatusForm, DeleteView):
             status_remove = gettext("status_remove")
             messages.add_message(request, messages.SUCCESS, status_remove)
             return redirect('statuses:list')
-
