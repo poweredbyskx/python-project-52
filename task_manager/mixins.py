@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.translation import gettext
+from django.utils.translation import gettext as _
 
 
 class FormView:
@@ -24,5 +25,5 @@ class EditView:
         if form.is_valid():
             form.save()
             messages.success(request, _(self.text))
-            return redirect(self.path)
+            return redirect('statuses:list')
         return render(request, self.template, {'form': form})
