@@ -63,7 +63,7 @@ msgstr ""
 
 #: task_manager/labels/templates/labels/index.html:14
 msgid "created_at"
-msgstr ""
+msgstr "Создано"
 
 #: task_manager/labels/templates/labels/index.html:15
 msgid "actions"

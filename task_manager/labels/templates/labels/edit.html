@@ -11,6 +11,6 @@
     <form action="{% url 'labels:edit_label' pk=label.id %}" method="post" class="m-0">
         {% csrf_token %}
         {% bootstrap_form form %}
-        <input class="btn btn-primary" type="submit" value="{% trans 'edit_label_btn' %}">
+        <input class="btn btn-primary" type="submit" value="{% trans 'Изменить' %}">
     </form>
 {% endblock %}
