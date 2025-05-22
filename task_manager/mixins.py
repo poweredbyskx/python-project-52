@@ -25,5 +25,5 @@ class EditView:
         if form.is_valid():
             form.save()
             messages.success(request, _(self.text))
-            return redirect('statuses:list')
+            return redirect(f'{self.path}:list')
         return render(request, self.template, {'form': form})
