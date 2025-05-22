@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 21:27+0500\n"
+"POT-Creation-Date: 2025-05-22 16:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,27 +21,25 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: task_manager/tasks/forms.py:12
-#: task_manager/tasks/templates/tasks/task_filter.html:99
+#: task_manager/tasks/templates/tasks/task_filter.html:32
 msgid "status_name"
 msgstr ""
 
 #: task_manager/tasks/forms.py:13
-#: task_manager/tasks/templates/tasks/edit.html:51
+#: task_manager/tasks/templates/tasks/edit.html:34
 msgid "task_description"
 msgstr "Описание"
 
 #: task_manager/tasks/forms.py:14
-#: task_manager/tasks/templates/tasks/edit.html:18
-#: task_manager/tasks/templates/tasks/task_filter.html:18
-#: task_manager/tasks/templates/tasks/task_filter.html:100
+#: task_manager/tasks/templates/tasks/edit.html:17
+#: task_manager/tasks/templates/tasks/task_filter.html:33
 msgid "status"
 msgstr "Статус"
 
 #: task_manager/tasks/forms.py:15
-#: task_manager/tasks/templates/tasks/edit.html:57
-#: task_manager/tasks/templates/tasks/task_filter.html:51
-#: task_manager/tasks/templates/tasks/task_filter.html:102
-#: task_manager/tasks/templates/tasks/view.html:26
+#: task_manager/tasks/templates/tasks/edit.html:42
+#: task_manager/tasks/templates/tasks/task_filter.html:35
+#: task_manager/tasks/templates/tasks/view.html:25
 msgid "executor"
 msgstr "Исполнитель"
 
@@ -53,11 +51,11 @@ msgstr ""
 msgid "remove_task"
 msgstr "Удаление задачи"
 
-#: task_manager/tasks/templates/tasks/delete.html:8
+#: task_manager/tasks/templates/tasks/delete.html:7
 msgid "remove_user_confirm"
 msgstr ""
 
-#: task_manager/tasks/templates/tasks/delete.html:11
+#: task_manager/tasks/templates/tasks/delete.html:10
 #, fuzzy
 #| msgid "create_status_btn"
 msgid "remove_user_btn"
@@ -67,57 +65,53 @@ msgstr "Создать задачу"
 msgid "edit_task"
 msgstr "Изменение задачи"
 
-#: task_manager/tasks/templates/tasks/edit.html:89
-#: task_manager/tasks/templates/tasks/task_filter.html:119
-#: task_manager/tasks/templates/tasks/view.html:34
+#: task_manager/tasks/templates/tasks/edit.html:77
+#: task_manager/tasks/templates/tasks/task_filter.html:56
+#: task_manager/tasks/templates/tasks/view.html:37
 msgid "edit_user_btn"
 msgstr ""
 
 #: task_manager/tasks/templates/tasks/new.html:7
-#: task_manager/tasks/templates/tasks/task_filter.html:8
+#: task_manager/tasks/templates/tasks/task_filter.html:9
 msgid "create_task"
 msgstr "Создать задачу"
 
-#: task_manager/tasks/templates/tasks/new.html:83
+#: task_manager/tasks/templates/tasks/new.html:65
 msgid "create_status_btn"
 msgstr "Создать задачу"
 
-#: task_manager/tasks/templates/tasks/task_filter.html:7
+#: task_manager/tasks/templates/tasks/task_filter.html:8
 msgid "tasks"
 msgstr "Задачи"
 
-#: task_manager/tasks/templates/tasks/task_filter.html:67
-msgid "label"
-msgstr "Метка"
-
-#: task_manager/tasks/templates/tasks/task_filter.html:89
+#: task_manager/tasks/templates/tasks/task_filter.html:22
 msgid "only_my_tasks"
 msgstr "Только свои задачи"
 
-#: task_manager/tasks/templates/tasks/task_filter.html:91
+#: task_manager/tasks/templates/tasks/task_filter.html:24
 msgid "show_btn"
 msgstr "Показать"
 
-#: task_manager/tasks/templates/tasks/task_filter.html:98
+#: task_manager/tasks/templates/tasks/task_filter.html:31
 msgid "id"
 msgstr ""
 
-#: task_manager/tasks/templates/tasks/task_filter.html:101
-#: task_manager/tasks/templates/tasks/view.html:22
+#: task_manager/tasks/templates/tasks/task_filter.html:34
+#: task_manager/tasks/templates/tasks/view.html:21
 msgid "author"
 msgstr "Автор"
 
-#: task_manager/tasks/templates/tasks/task_filter.html:103
-#: task_manager/tasks/templates/tasks/view.html:30
+#: task_manager/tasks/templates/tasks/task_filter.html:36
+#: task_manager/tasks/templates/tasks/view.html:33
 msgid "created_at"
 msgstr ""
 
-#: task_manager/tasks/templates/tasks/task_filter.html:104
+#: task_manager/tasks/templates/tasks/task_filter.html:37
 msgid "actions"
 msgstr ""
 
-#: task_manager/tasks/templates/tasks/task_filter.html:120
-#: task_manager/tasks/templates/tasks/view.html:35
+#: task_manager/tasks/templates/tasks/task_filter.html:57
+#: task_manager/tasks/templates/tasks/view.html:38
 msgid "remove"
 msgstr ""
 
@@ -129,13 +123,16 @@ msgstr "Просмотр задачи"
 msgid "task_created"
 msgstr "Задача успешно создана"
 
-#: task_manager/tasks/views.py:88
+#: task_manager/tasks/views.py:79
 msgid "remove_task_error"
 msgstr "Задачу может удалить только ее автор"
 
-#: task_manager/tasks/views.py:92
+#: task_manager/tasks/views.py:82
 msgid "task_remove"
 msgstr "Задача успешно удалена"
+
+#~ msgid "label"
+#~ msgstr "Метка"
 
 #~ msgid "task_edit"
 #~ msgstr "Задача успешно изменена"

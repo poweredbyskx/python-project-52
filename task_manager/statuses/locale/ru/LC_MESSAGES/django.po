@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 21:27+0500\n"
+"POT-Creation-Date: 2025-05-22 16:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: task_manager/statuses/forms.py:11
-#: task_manager/statuses/templates/index.html:13
+#: task_manager/statuses/templates/index.html:24
 msgid "status_name"
 msgstr "Имя"
 
@@ -29,11 +29,11 @@ msgstr "Имя"
 msgid "remove_status"
 msgstr "Удаление статуса"
 
-#: task_manager/statuses/templates/delete.html:8
+#: task_manager/statuses/templates/delete.html:7
 msgid "remove_user_confirm"
 msgstr ""
 
-#: task_manager/statuses/templates/delete.html:11
+#: task_manager/statuses/templates/delete.html:10
 #, fuzzy
 #| msgid "create_status_btn"
 msgid "remove_user_btn"
@@ -43,37 +43,37 @@ msgstr "Создать"
 msgid "edit_status"
 msgstr "Изменение статуса"
 
-#: task_manager/statuses/templates/edit.html:14
-#: task_manager/statuses/templates/index.html:25
+#: task_manager/statuses/templates/edit.html:13
+#: task_manager/statuses/templates/index.html:37
 msgid "edit_user_btn"
 msgstr ""
 
-#: task_manager/statuses/templates/index.html:4
+#: task_manager/statuses/templates/index.html:6
 msgid "statuses"
 msgstr ""
 
-#: task_manager/statuses/templates/index.html:5
+#: task_manager/statuses/templates/index.html:7
 #: task_manager/statuses/templates/new.html:7
 msgid "create_status"
 msgstr "Создать статус"
 
-#: task_manager/statuses/templates/index.html:12
+#: task_manager/statuses/templates/index.html:23
 msgid "id"
 msgstr ""
 
-#: task_manager/statuses/templates/index.html:14
+#: task_manager/statuses/templates/index.html:25
 msgid "created_at"
 msgstr ""
 
-#: task_manager/statuses/templates/index.html:15
+#: task_manager/statuses/templates/index.html:26
 msgid "actions"
 msgstr ""
 
-#: task_manager/statuses/templates/index.html:26
+#: task_manager/statuses/templates/index.html:40
 msgid "remove"
 msgstr ""
 
-#: task_manager/statuses/templates/new.html:14
+#: task_manager/statuses/templates/new.html:13
 msgid "create_status_btn"
 msgstr "Создать"
 
@@ -81,11 +81,15 @@ msgstr "Создать"
 msgid "status_created"
 msgstr "Статус успешно создан"
 
-#: task_manager/statuses/views.py:71
+#: task_manager/statuses/views.py:61
+msgid "Статус успешно изменен"
+msgstr ""
+
+#: task_manager/statuses/views.py:78
 msgid "status_error"
 msgstr "Невозможно удалить статус, потому что он используется"
 
-#: task_manager/statuses/views.py:75
+#: task_manager/statuses/views.py:82
 msgid "status_remove"
 msgstr "Статус успешно удален"
 

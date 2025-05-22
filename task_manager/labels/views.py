@@ -51,7 +51,17 @@ class LabelFormEditView(LoginRequiredMixin, View, LabelEditForm, EditView):
         form = LabelCreationForm(instance=label)
         return render(request, 'labels/edit.html',
                       {'form': form, 'label_id': label_id, 'label': label})
-    pass
+    def post(self, request, *args, **kwargs):
+        label_id = kwargs.get('pk')
+        label = Label.objects.get(id=label_id)
+        form = LabelCreationForm(request.POST, instance=label)
+        if form.is_valid():
+            form.save()
+            label_updated = gettext("label_edit")  # строка перевода, как в тесте
+            messages.success(request, label_updated)
+            return redirect('labels:list')
+        return render(request, 'labels/edit.html',
+                      {'form': form, 'label_id': label_id, 'label': label})
 
 
 class LabelForm:

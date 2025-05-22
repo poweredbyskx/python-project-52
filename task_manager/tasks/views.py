@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-
+from django.urls import reverse_lazy
 from task_manager.mixins import EditView
 from .forms import TaskCreationForm, TaskFilter
 from task_manager.tasks.models import Task
@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.utils.translation import gettext
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
+from django.shortcuts import get_object_or_404
 
 
 class TasksView(LoginRequiredMixin, FilterView):
