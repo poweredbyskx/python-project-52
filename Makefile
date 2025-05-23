@@ -1,4 +1,27 @@
-PORT ?= 8000
+install:
+	uv sync
+
+migrate:
+	uv run python3 manage.py migrate
+
+start:
+	uv run manage.py runserver 0.0.0.0:8000
+
+test:
+	uv run python3 manage.py test
+
+testcov:
+	uv run coverage run --source='.' manage.py test
+	uv run coverage xml
+
+makemessages:
+	uv run django-admin makemessages --ignore="static" --ignore=".env"  -l ru
+
+compilemessages:
+	uv run django-admin compilemessages
+
+collectstatic:
+	uv run python3 manage.py collectstatic --no-input
 
 build:
 	./build.sh
@@ -6,31 +29,10 @@ build:
 render-start:
 	gunicorn task_manager.wsgi
 
-install:
-	uv pip install .[dev]
-
 lint:
-	flake8 task_manager
+	uv run ruff check task_manager
 
-static:
-	python manage.py collectstatic --noinput
+format-app:
+	uv run ruff check --fix task_manager
 
-migrate:
-	python manage.py makemigrations
-	python manage.py migrate
-
-dev: migrate
-	python manage.py runserver
-
-start:
-	gunicorn -w 5 -b 0.0.0.0:$(PORT) task_manager.wsgi
-
-test:
-	python manage.py test
-
-test-coverage:
-	coverage run manage.py test
-	coverage report -m
-	coverage xml
-
-.PHONY: install lint static migrate dev start test
+check: test lint
