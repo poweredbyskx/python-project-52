@@ -27,7 +27,13 @@ msgstr ""
 
 #: task_manager/labels/templates/labels/delete.html:4
 msgid "remove_label"
-msgstr "Удаление метки"
+msgstr "Вы уверены, что хотите удалить"
+
+msgid "remove_label_btn"
+msgstr "Да, удалить"
+
+msgid "remove_label_confirm"
+msgstr "Удалить метку"
 
 #: task_manager/labels/templates/labels/delete.html:8
 msgid "remove_user_confirm"
@@ -91,5 +97,5 @@ msgstr "Невозможно удалить метку, потому что он
 msgid "label_remove"
 msgstr "Метка успешно удалена"
 
-#~ msgid "label_edit"
-#~ msgstr "Метка успешно изменена"
+msgid "label_edit"
+msgstr "Метка успешно изменена"

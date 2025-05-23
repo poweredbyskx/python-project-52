@@ -47,7 +47,7 @@
                     <option value="">---------</option>
                     {% for user in field.field.queryset %}
                         <option value="{{ user.pk }}"
-                            {% if field.value|stringformat:"s" == user.pk|stringformat:"s" or (task.executor and user.pk == task.executor.pk) %}
+                            {% if field.value|stringformat:"s" == user.pk|stringformat:"s" or task.executor and user.pk == task.executor.pk %}
                                 selected
                             {% endif %}
                         >{{ user.first_name }} {{ user.last_name }}</option>
