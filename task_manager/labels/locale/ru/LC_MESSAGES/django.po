@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 21:27+0500\n"
+"POT-Creation-Date: 2025-05-24 22:49+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,6 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: task_manager/labels/forms.py:11
-#: task_manager/labels/templates/labels/index.html:13
 msgid "status_name"
 msgstr ""
 
@@ -29,73 +28,78 @@ msgstr ""
 msgid "remove_label"
 msgstr "Вы уверены, что хотите удалить"
 
-msgid "remove_label_btn"
-msgstr "Да, удалить"
-
+#: task_manager/labels/templates/labels/delete.html:7
 msgid "remove_label_confirm"
 msgstr "Удалить метку"
 
-#: task_manager/labels/templates/labels/delete.html:8
-msgid "remove_user_confirm"
-msgstr ""
-
-#: task_manager/labels/templates/labels/delete.html:11
-#, fuzzy
-#| msgid "create_label"
-msgid "remove_user_btn"
-msgstr "Создать метку"
+#: task_manager/labels/templates/labels/delete.html:10
+msgid "remove_label_btn"
+msgstr "Да, удалить"
 
 #: task_manager/labels/templates/labels/edit.html:7
 msgid "edit_label"
 msgstr "Изменение метки"
 
-#: task_manager/labels/templates/labels/edit.html:14
-#: task_manager/labels/templates/labels/index.html:25
-msgid "edit_user_btn"
+#: task_manager/labels/templates/labels/edit.html:13
+#: task_manager/labels/templates/labels/index.html:35
+msgid "Изменить"
 msgstr ""
 
 #: task_manager/labels/templates/labels/index.html:4
 msgid "labels"
-msgstr ""
+msgstr "Метка"
 
 #: task_manager/labels/templates/labels/index.html:5
-#: task_manager/labels/templates/labels/new.html:7
+#: task_manager/labels/templates/labels/new.html:5
 msgid "create_label"
 msgstr "Создать метку"
 
-#: task_manager/labels/templates/labels/index.html:12
+#: task_manager/labels/templates/labels/index.html:22
 msgid "id"
 msgstr ""
 
-#: task_manager/labels/templates/labels/index.html:14
+#: task_manager/labels/templates/labels/index.html:23
+msgid "Имя"
+msgstr ""
+
+#: task_manager/labels/templates/labels/index.html:24
 msgid "created_at"
 msgstr "Создано"
 
-#: task_manager/labels/templates/labels/index.html:15
+#: task_manager/labels/templates/labels/index.html:25
 msgid "actions"
 msgstr ""
 
-#: task_manager/labels/templates/labels/index.html:26
+#: task_manager/labels/templates/labels/index.html:36
 msgid "remove"
 msgstr ""
 
-#: task_manager/labels/templates/labels/new.html:14
-#, fuzzy
-#| msgid "create_label"
-msgid "create_status_btn"
-msgstr "Создать метку"
+#: task_manager/labels/templates/labels/new.html:12
+msgid "Создать"
+msgstr ""
 
 #: task_manager/labels/views.py:30
 msgid "label_created"
 msgstr "Метка успешно создана"
 
-#: task_manager/labels/views.py:71
+#: task_manager/labels/views.py:60
+msgid "label_edit"
+msgstr "Метка успешно изменена"
+
+#: task_manager/labels/views.py:81
 msgid "remove_label_error"
 msgstr "Невозможно удалить метку, потому что она используется"
 
-#: task_manager/labels/views.py:75
+#: task_manager/labels/views.py:85
 msgid "label_remove"
 msgstr "Метка успешно удалена"
 
-msgid "label_edit"
-msgstr "Метка успешно изменена"
+#, fuzzy
+#~| msgid "create_label"
+#~ msgid "remove_user_btn"
+#~ msgstr "Создать метку"
+
+#, fuzzy
+#~| msgid "create_label"
+#~ msgid "create_status_btn"
+#~ msgstr "Создать метку"

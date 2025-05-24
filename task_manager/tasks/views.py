@@ -13,22 +13,23 @@ from django.shortcuts import get_object_or_404
 
 class TasksView(LoginRequiredMixin, FilterView):
     def get(self, request, *args, **kwargs):
-        is_creator = False
+        only_own_tasks_selected = bool(request.GET.get('only_own_tasks'))
         labels = request.GET.getlist('labels')
         status_id = request.GET.get('status', '')
         executor = request.GET.get('executor', '')
-        if request.GET.get('only_own_tasks'):
+
+        if only_own_tasks_selected:
             tasks = TaskFilter(request.GET, queryset=Task.objects.filter(author_id=request.user.id))
-            is_creator = True
         else:
             tasks = TaskFilter(request.GET, queryset=Task.objects.all())
+
         return render(request, 'tasks/task_filter.html',
                       {
                           'filter': tasks,
-                          'is_creator': is_creator,
+                          'only_own_tasks_selected': only_own_tasks_selected,
                           'labels': labels,
                           'status_id': status_id,
-                          'executor': executor
+                          'executor': executor,
                       })
 
 class TaskFormCreateView(LoginRequiredMixin, View):

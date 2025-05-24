@@ -49,8 +49,8 @@ msgid "edit_user_btn"
 msgstr ""
 
 #: task_manager/statuses/templates/index.html:6
-msgid "statuses"
-msgstr ""
+msgid "status"
+msgstr "Статус"
 
 #: task_manager/statuses/templates/index.html:7
 #: task_manager/statuses/templates/new.html:7
