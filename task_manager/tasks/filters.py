@@ -30,6 +30,15 @@ class TaskFilter(FilterSet):
         widget=CheckboxInput()
     )
 
+    def __init__(self, data=None, *args, **kwargs):
+        if data is not None and isinstance(data, QueryDict):
+            mutable_data = data.copy()
+            if 'labels' in mutable_data and not isinstance(mutable_data.getlist('labels'), list):
+                # Не обязательно, но безопасно
+                mutable_data.setlist('labels', mutable_data.getlist('labels'))
+            data = mutable_data
+        super().__init__(data, *args, **kwargs)
+
     def filter_only_own(self, queryset, name, value):
         request = self.request
         if value and request and request.user.is_authenticated:
