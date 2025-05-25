@@ -21,7 +21,12 @@ class TasksView(LoginRequiredMixin, FilterView):
     filterset_class = TaskFilter
 
     def get_queryset(self):
-        return super().get_queryset().order_by('created_at')
+        qs = super().get_queryset().order_by('created_at')
+        only_own = self.request.GET.get('only_own_tasks')
+        if only_own == '1':
+            qs = qs.filter(author=self.request.user)
+        return qs
+
 
     def get_filterset_kwargs(self, filterset_class):
         kwargs = super().get_filterset_kwargs(filterset_class)

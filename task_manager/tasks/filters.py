@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class TaskFilter(FilterSet):
     status = django_filters.ModelChoiceFilter(
         queryset=Status.objects.all(),
@@ -34,11 +35,6 @@ class TaskFilter(FilterSet):
         if value and request and request.user.is_authenticated:
             return queryset.filter(author=request.user)
         return queryset
-
-    class Meta:
-        model = Task
-        fields = ['status', 'executor', 'labels', 'only_own_tasks']
-
 
     class Meta:
         model = Task
