@@ -16,29 +16,22 @@ from .forms import TaskFilter
 
 class TaskListView(LoginRequiredMixin, FilterView):
     model = Task
-    template_name = 'tasks/index.html'
-    context_object_name = 'object_list'
     filterset_class = TaskFilter
+    template_name = 'tasks/index.html'
+    context_object_name = 'tasks'
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = Task.objects.all()
-        if self.request.GET.get('only_own_tasks') == '1':
-            queryset = queryset.filter(author=self.request.user)
+        # Начинаем с всех задач
+        queryset = super().get_queryset()
+        # Если фильтр не установил только свои задачи, то все
+        # Сам фильтр по only_own_tasks уже реализован в фильтре
         return queryset.order_by('id')
 
-    def get_filterset(self, filterset_class):
-        return filterset_class(
-            data=self.request.GET,
-            queryset=self.get_queryset(),
-            request=self.request,
-        )
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['only_own_tasks_selected'] = self.request.GET.get('only_own_tasks') == '1'
-        return context
-
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        kwargs['request'] = self.request
+        return kwargs
 
 class TasksView(LoginRequiredMixin, FilterView):
     filterset_class = TaskFilter
