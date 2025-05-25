@@ -10,16 +10,45 @@ from task_manager.mixins import EditView
 from .forms import TaskCreationForm, TaskFilter
 from task_manager.tasks.models import Task
 
+from django.views.generic import ListView
+from .models import Task
+from .forms import TaskFilter
 
-class TasksView(LoginRequiredMixin, FilterView):
+class TaskListView(LoginRequiredMixin, FilterView):
+    model = Task
+    template_name = 'tasks/index.html'
+    context_object_name = 'object_list'
     filterset_class = TaskFilter
-    template_name = 'tasks/task_filter.html'
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = Task.objects.all()
         if self.request.GET.get('only_own_tasks') == '1':
             queryset = queryset.filter(author=self.request.user)
-        return queryset
+        return queryset.order_by('id')
+
+    def get_filterset(self, filterset_class):
+        return filterset_class(
+            data=self.request.GET,
+            queryset=self.get_queryset(),
+            request=self.request,
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['only_own_tasks_selected'] = self.request.GET.get('only_own_tasks') == '1'
+        return context
+
+
+class TasksView(LoginRequiredMixin, FilterView):
+    filterset_class = TaskFilter
+    template_name = 'tasks/task_filter.html'
+    queryset = Task.objects.all()  # можно явно указать
+
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+        kwargs['request'] = self.request
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -29,7 +58,6 @@ class TasksView(LoginRequiredMixin, FilterView):
         context['executor'] = self.request.GET.get('executor', '')
         context['labels'] = self.request.GET.getlist('labels')
         return context
-
 
 
 class TaskFormCreateView(LoginRequiredMixin, View):

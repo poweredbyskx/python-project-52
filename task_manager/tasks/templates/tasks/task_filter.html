@@ -29,7 +29,7 @@
                 </select>
 
                 <label for="id_labels" class="form-label">{% trans "label" %}</label>
-                <select id="id_labels" name="labels" class="form-select mb-3">
+                <select id="id_labels" name="labels" class="form-select mb-3" multiple size="1">
                     <option value="">---------</option>
                         {% for choice in filter.form.labels.field.choices %}
                         <option value="{{ choice.0 }}"
@@ -43,10 +43,15 @@
 
 
                 <div class="form-check mb-3">
-                    <input type="checkbox" name="only_own_tasks" id="only_own_tasks" class="form-check-input"
-                    {% if only_own_tasks_selected %}checked{% endif %}>
-                    <label for="only_own_tasks" class="form-check-label">{% trans "only_my_tasks" %}</label>
-                </div>
+    <!-- value="1" чтобы чекбокс отдавал именно "1" -->
+    <input type="checkbox"
+           name="only_own_tasks"
+           value="1"
+           id="only_own_tasks"
+           class="form-check-input"
+           {% if only_own_tasks_selected %}checked{% endif %}>
+    <label for="only_own_tasks" class="form-check-label">{% trans "only_my_tasks" %}</label>
+</div>
 
                 <input class="btn btn-primary" type="submit" value="{% trans 'show_btn' %}">
             </form>
