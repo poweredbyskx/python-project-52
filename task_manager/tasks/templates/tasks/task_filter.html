@@ -13,49 +13,45 @@
 <div class="card shadow-sm">
     <div class="card-body p-4">
         <form action="{% url 'tasks:list' %}" method="get">
+
             <!-- Статус -->
-<label for="id_status" class="form-label" id="status-label">{% trans "status" %}</label>
-<select id="id_status"
-        name="status"
-        class="form-select mb-3"
-        aria-labelledby="status-label">
-    {% for choice in filter.form.status.field.choices %}
-        <option value="{{ choice.0 }}"
-            {% if filter.form.status.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
-            {{ choice.1 }}
-        </option>
-    {% endfor %}
-</select>
+            <div class="mb-3">
+                <label for="id_status" class="form-label">{% trans "status" %}</label>
+                <select id="id_status" name="status" class="form-select">
+                    {% for choice in filter.form.status.field.choices %}
+                        <option value="{{ choice.0 }}"
+                            {% if filter.form.status.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
+                            {{ choice.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-<!-- Исполнитель -->
-<label for="id_executor" class="form-label" id="executor-label">{% trans "executor" %}</label>
-<select id="id_executor"
-        name="executor"
-        class="form-select mb-3"
-        aria-labelledby="executor-label">
-    {% for choice in filter.form.executor.field.choices %}
-        <option value="{{ choice.0 }}"
-            {% if filter.form.executor.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
-            {{ choice.1 }}
-        </option>
-    {% endfor %}
-</select>
+            <!-- Исполнитель -->
+            <div class="mb-3">
+                <label for="id_executor" class="form-label">{% trans "executor" %}</label>
+                <select id="id_executor" name="executor" class="form-select">
+                    {% for choice in filter.form.executor.field.choices %}
+                        <option value="{{ choice.0 }}"
+                            {% if filter.form.executor.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
+                            {{ choice.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-<!-- Метки -->
-<label for="id_labels" class="form-label" id="labels-label">{% trans "label" %}</label>
-<select id="id_labels"
-        name="labels"
-        multiple
-        class="form-select mb-3"
-        aria-labelledby="labels-label">
-    {% for choice in filter.form.labels.field.choices %}
-        <option value="{{ choice.0 }}"
-            {% if filter.form.labels.value and choice.0|stringformat:"s" in filter.form.labels.value %}selected{% endif %}>
-            {{ choice.1 }}
-        </option>
-    {% endfor %}
-</select>
-
+            <!-- Метки -->
+            <div class="mb-3">
+                <label for="id_labels" class="form-label">{% trans "label" %}</label>
+                <select id="id_labels" name="labels" multiple class="form-select">
+                    {% for choice in filter.form.labels.field.choices %}
+                        <option value="{{ choice.0 }}"
+                            {% if filter.form.labels.value and choice.0|stringformat:"s" in filter.form.labels.value %}selected{% endif %}>
+                            {{ choice.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
             <!-- Только свои задачи -->
             <div class="form-check mb-3">
@@ -120,4 +116,3 @@
     </tbody>
 </table>
 {% endblock %}
-
