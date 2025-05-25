@@ -98,10 +98,9 @@ msgid "id"
 msgstr ""
 
 #: task_manager/tasks/templates/tasks/task_filter.html:33
-#, fuzzy
-#| msgid "task_remove"
+
 msgid "task_name"
-msgstr "Задача успешно удалена"
+msgstr "Имя"
 
 #: task_manager/tasks/templates/tasks/task_filter.html:35
 #: task_manager/tasks/templates/tasks/view.html:21
@@ -142,8 +141,8 @@ msgstr "Задачу может удалить только ее автор"
 msgid "task_remove"
 msgstr "Задача успешно удалена"
 
-#~ msgid "label"
-#~ msgstr "Метка"
+msgid "label"
+msgstr "Метка"
 
 #~ msgid "task_edit"
 #~ msgstr "Задача успешно изменена"

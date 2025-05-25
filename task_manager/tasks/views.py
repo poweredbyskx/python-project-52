@@ -1,36 +1,36 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.urls import reverse_lazy
-from task_manager.mixins import EditView
-from .forms import TaskCreationForm, TaskFilter
-from task_manager.tasks.models import Task
 from django.contrib import messages
 from django.utils.translation import gettext
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django_filters.views import FilterView
-from django.shortcuts import get_object_or_404
+
+from task_manager.mixins import EditView
+from .forms import TaskCreationForm, TaskFilter
+from task_manager.tasks.models import Task
 
 
 class TasksView(LoginRequiredMixin, FilterView):
-    def get(self, request, *args, **kwargs):
-        only_own_tasks_selected = bool(request.GET.get('only_own_tasks'))
-        labels = request.GET.getlist('labels')
-        status_id = request.GET.get('status', '')
-        executor = request.GET.get('executor', '')
+    filterset_class = TaskFilter
+    template_name = 'tasks/task_filter.html'
 
-        if only_own_tasks_selected:
-            tasks = TaskFilter(request.GET, queryset=Task.objects.filter(author_id=request.user.id))
-        else:
-            tasks = TaskFilter(request.GET, queryset=Task.objects.all())
+    def get_queryset(self):
+        queryset = Task.objects.all()
+        if self.request.GET.get('only_own_tasks') == '1':
+            queryset = queryset.filter(author=self.request.user)
+        return queryset
 
-        return render(request, 'tasks/task_filter.html',
-                      {
-                          'filter': tasks,
-                          'only_own_tasks_selected': only_own_tasks_selected,
-                          'labels': labels,
-                          'status_id': status_id,
-                          'executor': executor,
-                      })
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        only_own = self.request.GET.get('only_own_tasks')
+        context['only_own_tasks_selected'] = only_own == '1'
+        context['status_id'] = self.request.GET.get('status', '')
+        context['executor'] = self.request.GET.get('executor', '')
+        context['labels'] = self.request.GET.getlist('labels')
+        return context
+
+
 
 class TaskFormCreateView(LoginRequiredMixin, View):
     def get(self, request):
@@ -43,12 +43,11 @@ class TaskFormCreateView(LoginRequiredMixin, View):
             task = form.save(commit=False)
             task.author = request.user
             task.save()
-            for label in form.cleaned_data['labels']:
-                task.labels.add(label)
-            task.save()
+            task.labels.set(form.cleaned_data['labels'])
             messages.success(request, gettext("task_created"))
             return redirect(reverse_lazy('tasks:list'))
         return render(request, 'tasks/new.html', {'form': form})
+
 
 class TaskForm:
     value = Task
@@ -61,13 +60,24 @@ class TaskForm:
 class TaskFormEditView(LoginRequiredMixin, View, TaskForm, EditView):
     def get(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
-        task = Task.objects.get(id=task_id)
-        labels = task.labels.all().values_list('name')
+        task = get_object_or_404(Task, id=task_id)
+        labels = task.labels.all()
         form = TaskCreationForm(instance=task)
         return render(request, 'tasks/edit.html',
-                      {'form': form, 'task_id': task_id, 'task': task,
-                       'labels': labels})
-    pass
+                      {'form': form, 'task_id': task_id, 'task': task, 'labels': labels})
+
+    def post(self, request, *args, **kwargs):
+        task_id = kwargs.get('pk')
+        task = get_object_or_404(Task, id=task_id)
+        form = TaskCreationForm(request.POST, instance=task)
+        if form.is_valid():
+            task = form.save()
+            task.labels.set(form.cleaned_data['labels'])
+            messages.success(request, gettext("task_updated"))
+            return redirect(reverse_lazy('tasks:list'))
+        labels = task.labels.all()
+        return render(request, 'tasks/edit.html',
+                      {'form': form, 'task_id': task_id, 'task': task, 'labels': labels})
 
 
 class TaskFormDeleteView(LoginRequiredMixin, View):
@@ -88,7 +98,7 @@ class TaskFormDeleteView(LoginRequiredMixin, View):
 class TaskFormView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
-        task = Task.objects.get(id=task_id)
+        task = get_object_or_404(Task, id=task_id)
         labels = task.labels.all()
         return render(request, 'tasks/view.html',
                       {'task_id': task_id, 'task': task, 'labels': labels})
