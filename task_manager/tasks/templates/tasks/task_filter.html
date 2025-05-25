@@ -10,97 +10,103 @@
 {% endblock %}
 
 {% block content %}
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <form action="{% url 'tasks:list' %}" method="get">
+<div class="card shadow-sm">
+    <div class="card-body p-4">
+        <form action="{% url 'tasks:list' %}" method="get">
+            <!-- Статус -->
+            <label for="id_status" class="form-label">{% trans "status" %}</label>
+            <select id="id_status" name="status" class="form-select mb-3">
+                {% for choice in filter.form.status.field.choices %}
+                    <option value="{{ choice.0 }}"
+                        {% if filter.form.status.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
+                        {{ choice.1 }}
+                    </option>
+                {% endfor %}
+            </select>
 
-                <label for="id_status" class="form-label">{% trans "status" %}</label>
-                <select id="id_status" name="status" class="form-select mb-3">
-                    {% for choice in filter.form.status.field.choices %}
-                        <option value="{{ choice.0 }}" {% if filter.form.status.value == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
-                    {% endfor %}
-                </select>
+            <!-- Исполнитель -->
+            <label for="id_executor" class="form-label">{% trans "executor" %}</label>
+            <select id="id_executor" name="executor" class="form-select mb-3">
+                {% for choice in filter.form.executor.field.choices %}
+                    <option value="{{ choice.0 }}"
+                        {% if filter.form.executor.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
+                        {{ choice.1 }}
+                    </option>
+                {% endfor %}
+            </select>
 
-                <label for="id_executor" class="form-label">{% trans "executor" %}</label>
-                <select id="id_executor" name="executor" class="form-select mb-3">
-                    {% for choice in filter.form.executor.field.choices %}
-                        <option value="{{ choice.0 }}" {% if filter.form.executor.value == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
-                    {% endfor %}
-                </select>
+            <!-- Метки (множественный выбор) -->
+            <label for="id_labels" class="form-label">{% trans "label" %}</label>
+            <select id="id_labels" name="labels" multiple class="form-select mb-3">
+                {% for choice in filter.form.labels.field.choices %}
+                    <option value="{{ choice.0 }}"
+                        {% if filter.form.labels.value and choice.0|stringformat:"s" in filter.form.labels.value %}selected{% endif %}>
+                        {{ choice.1 }}
+                    </option>
+                {% endfor %}
+            </select>
 
-                <label for="id_labels" class="form-label">{% trans "label" %}</label>
-                <select id="id_labels" name="labels" class="form-select mb-3">
-                    <option value="">---------</option>
-                        {% for choice in filter.form.labels.field.choices %}
-                        <option value="{{ choice.0 }}"
-                                {% if choice.0 in filter.form.labels.value %}selected{% endif %}>
-                            {{ choice.1 }}
-                        </option>
-                    {% endfor %}
-                </select>
+            <!-- Только свои задачи -->
+            <div class="form-check mb-3">
+                <input type="checkbox"
+                       name="only_own_tasks"
+                       value="1"
+                       id="only_own_tasks"
+                       class="form-check-input"
+                       {% if only_own_tasks_selected %}checked{% endif %}>
+                <label for="only_own_tasks" class="form-check-label">{% trans "only_my_tasks" %}</label>
+            </div>
 
-
-
-
-                <div class="form-check mb-3">
-    <!-- value="1" чтобы чекбокс отдавал именно "1" -->
-    <input type="checkbox"
-           name="only_own_tasks"
-           value="1"
-           id="only_own_tasks"
-           class="form-check-input"
-           {% if only_own_tasks_selected %}checked{% endif %}>
-    <label for="only_own_tasks" class="form-check-label">{% trans "only_my_tasks" %}</label>
+            <input class="btn btn-primary" type="submit" value="{% trans 'show_btn' %}">
+        </form>
+    </div>
 </div>
 
-                <input class="btn btn-primary" type="submit" value="{% trans 'show_btn' %}">
-            </form>
-        </div>
-    </div>
-
-    <table class="table table-striped mt-5">
-        <thead>
+<!-- Таблица задач -->
+<table class="table table-striped mt-5">
+    <thead>
+        <tr>
+            <th>{% trans "id" %}</th>
+            <th>{% trans "task_name" %}</th>
+            <th>{% trans "status" %}</th>
+            <th>{% trans "author" %}</th>
+            <th>{% trans "executor" %}</th>
+            <th>{% trans "labels" %}</th>
+            <th>{% trans "created_at" %}</th>
+            <th>{% trans "actions" %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in object_list %}
             <tr>
-                <th>{% trans "id" %}</th>
-                <th>{% trans "task_name" %}</th>
-                <th>{% trans "status" %}</th>
-                <th>{% trans "author" %}</th>
-                <th>{% trans "executor" %}</th>
-                <th>{% trans "labels" %}</th>
-                <th>{% trans "created_at" %}</th>
-                <th>{% trans "actions" %}</th>
+                <td>{{ task.id }}</td>
+                <td><a href="{% url 'tasks:view_task' task.id %}">{{ task.name }}</a></td>
+                <td>{{ task.status.name }}</td>
+                <td>{{ task.author.first_name }} {{ task.author.last_name }}</td>
+                <td>
+                    {% if task.executor %}
+                        {{ task.executor.first_name }} {{ task.executor.last_name }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% for label in task.labels.all %}
+                        <span class="badge bg-secondary">{{ label.name }}</span>
+                    {% empty %}
+                        <span class="text-muted">—</span>
+                    {% endfor %}
+                </td>
+                <td>{{ task.created_at|date:"Y-m-d H:i" }}</td>
+                <td class="d-flex">
+                    <a href="{% url 'tasks:edit_task' task.id %}" class="btn btn-primary me-1">{% trans "edit_user_btn" %}</a>
+                    <a href="{% url 'tasks:drop_task' task.id %}" class="btn btn-danger me-1">{% trans "remove" %}</a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            {% for task in object_list %}
-                <tr>
-                    <td>{{ task.id }}</td>
-                    <td><a href="{% url 'tasks:view_task' task.id %}">{{ task.name }}</a></td>
-                    <td>{{ task.status.name }}</td>
-                    <td>{{ task.author.first_name }} {{ task.author.last_name }}</td>
-                    <td>
-                        {% if task.executor %}
-                            {{ task.executor.first_name }} {{ task.executor.last_name }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% for label in task.labels.all %}
-                            <span class="badge bg-secondary">{{ label.name }}</span>
-                        {% empty %}
-                            <span class="text-muted">—</span>
-                        {% endfor %}
-                    </td>
-                    <td>{{ task.created_at|date:"Y-m-d H:i" }}</td>
-                    <td class="d-flex">
-                        <a href="{% url 'tasks:edit_task' task.id %}" class="btn btn-primary me-1">{% trans "edit_user_btn" %}</a>
-                        <a href="{% url 'tasks:drop_task' task.id %}" class="btn btn-danger me-1">{% trans "remove" %}</a>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="8" class="text-center">{% trans "no_tasks_found" %}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">{% trans "no_tasks_found" %}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
+

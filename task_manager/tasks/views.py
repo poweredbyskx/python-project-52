@@ -12,36 +12,22 @@ from task_manager.tasks.models import Task
 
 from django.views.generic import ListView
 from .models import Task
-from .forms import TaskFilter
-
-class TaskListView(LoginRequiredMixin, FilterView):
-    model = Task
-    filterset_class = TaskFilter
-    template_name = 'tasks/index.html'
-    context_object_name = 'tasks'
-    paginate_by = 10
-
-    def get_queryset(self):
-        # Начинаем с всех задач
-        queryset = super().get_queryset()
-        # Если фильтр не установил только свои задачи, то все
-        # Сам фильтр по only_own_tasks уже реализован в фильтре
-        return queryset.order_by('id')
-
-    def get_filterset_kwargs(self, filterset_class):
-        kwargs = super().get_filterset_kwargs(filterset_class)
-        kwargs['request'] = self.request
-        return kwargs
+from .filters import TaskFilter
 
 class TasksView(LoginRequiredMixin, FilterView):
-    filterset_class = TaskFilter
+    model = Task
     template_name = 'tasks/task_filter.html'
-    queryset = Task.objects.all()  # можно явно указать
+    context_object_name = 'object_list'
+    filterset_class = TaskFilter
+
+    def get_queryset(self):
+        return super().get_queryset().order_by('created_at')
 
     def get_filterset_kwargs(self, filterset_class):
         kwargs = super().get_filterset_kwargs(filterset_class)
-        kwargs['request'] = self.request
+        kwargs['request'] = self.request  # ← это ключ!
         return kwargs
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
