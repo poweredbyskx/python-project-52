@@ -30,11 +30,11 @@
             <div class="mb-3">
                 <label for="id_executor">Исполнитель</label>
                 <select name="executor" id="id_executor" class="form-control">
-                    {% for choice in filter.form.executor.field.choices %}
-                        <option value="{{ choice.0 }}"
-                            {% if filter.form.executor.value|stringformat:"s" == choice.0|stringformat:"s" %}selected{% endif %}>
-                            {{ choice.1 }}
-                        </option>
+                  {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.name }}</option>
+
+
+
                     {% endfor %}
                 </select>
             </div>
