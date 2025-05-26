@@ -18,7 +18,6 @@ class TaskFilter(FilterSet):
     )
     executor = django_filters.ModelChoiceFilter(
         queryset=User.objects.all(),
-        label=gettext('executor'),
         empty_label=gettext('executor')
     )
     labels = django_filters.ModelMultipleChoiceFilter(
