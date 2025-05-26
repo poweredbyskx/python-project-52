@@ -41,6 +41,7 @@ msgstr "Статус"
 #: task_manager/tasks/templates/tasks/edit.html:45
 #: task_manager/tasks/templates/tasks/task_filter.html:36
 #: task_manager/tasks/templates/tasks/view.html:25
+
 msgid "executor"
 msgstr "Исполнитель"
 
