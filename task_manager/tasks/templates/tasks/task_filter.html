@@ -77,9 +77,7 @@
             <th>{% trans "status" %}</th>
             <th>{% trans "author" %}</th>
             <th>{% trans "executor" %}</th>
-            <th>{% trans "labels" %}</th>
             <th>{% trans "created_at" %}</th>
-            <th>{% trans "actions" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -108,9 +106,7 @@
                 </td>
             </tr>
         {% empty %}
-            <tr>
-                <td colspan="8" class="text-center">{% trans "no_tasks_found" %}</td>
-            </tr>
+
         {% endfor %}
     </tbody>
 </table>
