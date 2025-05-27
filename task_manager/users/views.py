@@ -91,16 +91,19 @@ class UsersFormEditView(LoginRequiredMixin, View):
 class UsersFormDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
         user = get_object_or_404(User, id=pk)
-        # Проверки прав и задач...
+        return render(request, 'users/delete.html', {'user': user, 'user_id': pk})
+
+    def post(self, request, pk):
+        user = get_object_or_404(User, id=pk)
+
         if str(request.user.id) != str(pk):
             messages.error(request, _("delete_permission_error"))
             return redirect('users:users')
-        has_tasks = Task.objects.filter(author_id=pk).exists() or Task.objects.filter(executor_id=pk).exists()
-        if has_tasks:
-            messages.error(request, _("remove_error"))
-            return redirect('users:users')
+
+        Task.objects.filter(author_id=pk).delete()
+        Task.objects.filter(executor_id=pk).delete()
+
 
         user.delete()
         messages.success(request, _("remove_success"))
         return redirect('users:users')
-
