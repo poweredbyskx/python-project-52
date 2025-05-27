@@ -7,6 +7,8 @@ from .models import Task
 from task_manager.statuses.models import Status
 from task_manager.labels.models import Label
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
+
 
 User = get_user_model()
 
@@ -14,20 +16,20 @@ User = get_user_model()
 class TaskFilter(FilterSet):
     status = django_filters.ModelChoiceFilter(
         queryset=Status.objects.all(),
-        label=gettext('status')
+        label=_('Статус')
     )
     executor = django_filters.ModelChoiceFilter(
         queryset=User.objects.all(),
-        label=gettext('executor'),
-        empty_label=gettext('executor')
+        label=_('Исполнитель'),
+        empty_label=_('----------')
     )
     labels = django_filters.ModelMultipleChoiceFilter(
         queryset=Label.objects.all(),
-        label=gettext('labels')
+        label=_('Метка')
     )
     only_own_tasks = BooleanFilter(
         method='filter_only_own',
-        label=gettext('only_my_tasks'),
+        label=_('Только свои задачи'),
         widget=CheckboxInput()
     )
 
@@ -48,4 +50,4 @@ class TaskFilter(FilterSet):
 
     class Meta:
         model = Task
-        fields = ['status', 'executor', 'labels', 'only_own_tasks']
+        fields = ['status', 'executor', 'labels']

@@ -2,6 +2,9 @@ from django.db import models
 from task_manager.statuses.models import Status
 from task_manager.users.models import User
 from task_manager.labels.models import Label
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class Task(models.Model):
@@ -26,3 +29,8 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+    def __str__(self):
+        full_name = self.get_full_name()  # first_name + last_name
+        return full_name if full_name else self.username
+
