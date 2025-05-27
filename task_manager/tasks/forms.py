@@ -3,6 +3,8 @@ from django import forms
 from django.forms import ModelForm
 from .models import Task
 from django.utils.translation import gettext
+from task_manager.statuses.models import Status
+
 
 class TaskCreationForm(ModelForm):
     class Meta:
