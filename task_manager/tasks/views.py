@@ -85,7 +85,7 @@ class TaskFormEditView(LoginRequiredMixin, View, TaskForm, EditView):
         if form.is_valid():
             task = form.save()
             task.labels.set(form.cleaned_data['labels'])
-            messages.success(request, gettext("task_updated"))
+            messages.success(request, gettext("task_edit"))
             return redirect(reverse_lazy('tasks:list'))
         labels = task.labels.all()
         return render(request, 'tasks/edit.html',

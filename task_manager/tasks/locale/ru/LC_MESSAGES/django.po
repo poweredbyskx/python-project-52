@@ -145,5 +145,5 @@ msgstr "Задача успешно удалена"
 msgid "label"
 msgstr "Метка"
 
-msgid "task_updated"
+msgid "task_edit"
 msgstr "Задача успешно изменена"
