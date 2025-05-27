@@ -105,7 +105,7 @@
                 </td>
                 <td>{{ task.created_at|date:"Y-m-d H:i" }}</td>
                 <td class="d-flex">
-                    <a href="{% url 'tasks:edit_task' task.id %}" class="btn btn-primary me-1">{% trans "Редактировать" %}</a>
+                    <a href="{% url 'tasks:edit_task' task.id %}" class="btn btn-primary me-1">{% trans "Изменить" %}</a>
                     <a href="{% url 'tasks:drop_task' task.id %}" class="btn btn-danger me-1">{% trans "Удалить" %}</a>
                 </td>
             </tr>
