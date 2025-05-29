@@ -14,6 +14,10 @@ from django.views.generic import ListView
 from .models import Task
 from .filters import TaskFilter
 
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
+
+
 class TasksView(LoginRequiredMixin, FilterView):
     model = Task
     template_name = 'tasks/task_filter.html'

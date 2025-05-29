@@ -54,12 +54,11 @@ msgid "remove_task"
 msgstr "Удаление задачи"
 
 #: task_manager/tasks/templates/tasks/delete.html:13
-msgid "remove_user_confirm"
+msgid "remove_user_c"
 msgstr "Да, удалить"
 
 #: task_manager/tasks/templates/tasks/delete.html:10
-#, fuzzy
-#| msgid "create_status_btn"
+
 msgid "remove_user_btn"
 msgstr "Создать задачу"
 
