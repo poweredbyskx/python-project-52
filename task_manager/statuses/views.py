@@ -20,17 +20,16 @@ class StatusesView(LoginRequiredMixin, View, StatusViewForm, FormView):
 
 class StatusesFormCreateView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, "new.html", context={"form": StatusCreationForm()})
+        return render(request, "new.html",
+                      {"form": StatusCreationForm()})
 
     def post(self, request):
         form = StatusCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            status_created = gettext("status_created")
-            messages.add_message(request, messages.SUCCESS, status_created)
+            messages.success(request, gettext("status_created"))
             return redirect("statuses:list")
-        context = {"form": form}
-        return render(request, "new.html", context)
+        return render(request, "new.html", {"form": form})
 
 
 class StatusEditForm:
@@ -43,20 +42,20 @@ class StatusEditForm:
 
 class StatusFormEditView(LoginRequiredMixin, View, StatusEditForm, EditView):
     def get(self, request, *args, **kwargs):
-        status_id = kwargs.get("pk")
-        status = Status.objects.get(id=status_id)
+        status = Status.objects.get(id=kwargs.get("pk"))
         form = StatusCreationForm(instance=status)
-        return render(request, "edit.html", {"form": form, "status_id": status_id})
+        context = {"form": form, "status_id": status.id}
+        return render(request, "edit.html", context)
 
     def post(self, request, *args, **kwargs):
-        status_id = kwargs.get("pk")
-        status = Status.objects.get(id=status_id)
+        status = Status.objects.get(id=kwargs.get("pk"))
         form = StatusCreationForm(request.POST, instance=status)
         if form.is_valid():
             form.save()
             messages.success(request, gettext("Статус успешно изменен"))
             return redirect("statuses:list")
-        return render(request, "edit.html", {"form": form, "status_id": status_id})
+        context = {"form": form, "status_id": status.id}
+        return render(request, "edit.html", context)
 
 
 class StatusForm:
@@ -68,12 +67,9 @@ class StatusFormDeleteView(LoginRequiredMixin, View, StatusForm, DeleteView):
     def post(self, request, *args, **kwargs):
         status_id = kwargs.get("pk")
         status = Status.objects.get(id=status_id)
-        task = Task.objects.filter(status_id=status_id)
-        if task.exists():
-            messages.add_message(request, messages.ERROR, gettext("status_error"))
+        if Task.objects.filter(status_id=status_id).exists():
+            messages.error(request, gettext("status_error"))
             return redirect("statuses:list")
-        if status:
-            status.delete()
-            status_remove = gettext("status_remove")
-            messages.add_message(request, messages.SUCCESS, status_remove)
-            return redirect("statuses:list")
+        status.delete()
+        messages.success(request, gettext("status_remove"))
+        return redirect("statuses:list")
