@@ -100,10 +100,10 @@ class TaskFormDeleteView(LoginRequiredMixin, View):
             'tasks/delete.html',
             {
                 'task': task,
-                'title': gettext('Delete task'),
-                'button_name': gettext('Yes, delete')
+                'title': gettext('remove_task'),
             }
         )
+
 
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs.get('pk'))
