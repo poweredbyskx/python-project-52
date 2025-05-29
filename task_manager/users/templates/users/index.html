@@ -24,7 +24,14 @@
                     <td>{{ user.date_joined }}</td>
                     <td class="d-flex">
                         <a href="{% url 'users:user_update' user.id %}" class="btn btn-primary me-1">{% translate 'edit_user_btn' %}</a>
-                        <a href="{% url 'users:user_delete' user.id %}" class="btn btn-primary me-1">{% translate 'remove' %}</a>
+
+                        <form method="post" action="{% url 'users:user_delete' user.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                {% translate 'remove' %}
+                            </button>
+                        </form>
+
                     </td>
                 </tr>
             {% endfor %}
