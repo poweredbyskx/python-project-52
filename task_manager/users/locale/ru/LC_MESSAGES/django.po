@@ -170,7 +170,7 @@ msgstr "Пользователь успешно изменен"
 
 #: task_manager/users/views.py:100
 msgid "delete_permission_error"
-msgstr ""
+msgstr "У вас нет прав для изменения"
 
 #: task_manager/users/views.py:105
 msgid "remove_error"
