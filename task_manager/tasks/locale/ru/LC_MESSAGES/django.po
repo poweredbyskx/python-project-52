@@ -53,9 +53,9 @@ msgstr "Метка"
 msgid "remove_task"
 msgstr "Удаление задачи"
 
-#: task_manager/tasks/templates/tasks/delete.html:7
+#: task_manager/tasks/templates/tasks/delete.html:13
 msgid "remove_user_confirm"
-msgstr ""
+msgstr "Да, удалить"
 
 #: task_manager/tasks/templates/tasks/delete.html:10
 #, fuzzy
@@ -122,9 +122,9 @@ msgstr ""
 msgid "remove"
 msgstr ""
 
-#: task_manager/tasks/templates/tasks/task_filter.html:63
-msgid "no_tasks_found"
-msgstr ""
+#: task_manager/tasks/delete.html/:9
+msgid "Are you sure you want to delete"
+msgstr "Вы уверены, что хотите удалить"
 
 #: task_manager/tasks/templates/tasks/view.html:4
 msgid "view_task"

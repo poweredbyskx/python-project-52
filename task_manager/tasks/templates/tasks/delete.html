@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-  <p>{% translate 'Вы уверены, что хотите удалить' %} <strong>{{ task.name }}</strong>?</p>
+  <p>{% translate 'Are you sure you want to delete' %} <strong>{{ task.name }}</strong>?</p>
   <form action="{% url 'tasks:drop_task' pk=task.id %}" method="post" class="m-0">
     {% csrf_token %}
     <button type="submit" name="confirm_delete" value="yes" class="btn btn-danger">

@@ -95,15 +95,7 @@ class TaskFormEditView(LoginRequiredMixin, View, TaskForm, EditView):
 class TaskFormDeleteView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs.get('pk'))
-        return render(
-            request,
-            'tasks/delete.html',
-            {
-                'task': task,
-                'title': gettext('remove_task'),
-            }
-        )
-
+        return render(request, 'tasks/delete.html', {'task': task})
 
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs.get('pk'))
@@ -113,6 +105,7 @@ class TaskFormDeleteView(LoginRequiredMixin, View):
         task.delete()
         messages.success(request, gettext("task_remove"))
         return redirect(reverse_lazy('tasks:list'))
+
 
 
 class TaskFormView(LoginRequiredMixin, View):
