@@ -6,7 +6,7 @@ from django.utils.translation import gettext
 class StatusCreationForm(ModelForm):
     class Meta:
         model = Status
-        fields = ['name']
+        fields = ["name"]
         labels = {
             "name": gettext("status_name"),
         }

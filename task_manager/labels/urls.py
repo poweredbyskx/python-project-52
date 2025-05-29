@@ -6,12 +6,11 @@ from task_manager.labels.views import (
     LabelFormDeleteView,
 )
 
-app_name = 'labels'
+app_name = "labels"
 
 urlpatterns = [
-    path('', views.LabelsView.as_view(), name='list'),
-    path('create/', LabelFormCreateView.as_view(), name='new_label'),
-    path('<int:pk>/update/', LabelFormEditView.as_view(), name='edit_label'),
-    path('<int:pk>/delete/', LabelFormDeleteView.as_view(),
-         name='drop_label'),
+    path("", views.LabelsView.as_view(), name="list"),
+    path("create/", LabelFormCreateView.as_view(), name="new_label"),
+    path("<int:pk>/update/", LabelFormEditView.as_view(), name="edit_label"),
+    path("<int:pk>/delete/", LabelFormDeleteView.as_view(), name="drop_label"),
 ]

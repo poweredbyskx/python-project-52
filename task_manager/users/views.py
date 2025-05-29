@@ -14,78 +14,78 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         messages.info(request, _("log_out"))
-        return redirect('root')
+        return redirect("root")
 
 
 class LoginView(View):
     def get(self, request):
-        return render(request, 'registration/login.html', {
-            'form': AuthenticationForm()
-        })
+        return render(
+            request, "registration/login.html", {"form": AuthenticationForm()}
+        )
 
     def post(self, request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
             user = authenticate(request, username=username, password=password)
             if user is not None and user.is_active:
                 login(request, user)
                 messages.success(request, _("auth_success"))
-                return redirect('root')
+                return redirect("root")
 
         messages.error(request, _("auth_form_error"))
-        return render(request, 'registration/login.html', {'form': form})
+        return render(request, "registration/login.html", {"form": form})
 
 
 class IndexView(View):
     def get(self, request):
-        return render(request, 'welcome/index.html')
+        return render(request, "welcome/index.html")
 
 
 class UsersView(View):
     def get(self, request):
         users = User.objects.all()
-        return render(request, 'users/index.html', {'users': users})
+        return render(request, "users/index.html", {"users": users})
 
 
 class UsersFormCreateView(View):
     def get(self, request):
-        return render(request, 'registration/register.html', {
-            'form': CustomUserCreationForm()
-        })
+        return render(
+            request, "registration/register.html", {"form": CustomUserCreationForm()}
+        )
 
     def post(self, request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, _("user_create_success"))
-            return redirect('login')
-        return render(request, 'registration/register.html', {'form': form})
+            return redirect("login")
+        return render(request, "registration/register.html", {"form": form})
 
 
 class UsersFormEditView(LoginRequiredMixin, View):
     def get(self, request, pk):
         if str(request.user.id) != str(pk):
             messages.error(request, _("edit_error"))
-            return redirect('users:users')
+            return redirect("users:users")
 
         user = get_object_or_404(User, id=pk)
         form = CustomUserChangeForm(instance=user)
-        return render(request, 'users/edit.html', {'form': form, 'user': user})
+        return render(request, "users/edit.html", {"form": form, "user": user})
 
     def post(self, request, pk):
         if str(request.user.id) != str(pk):
             messages.error(request, _("edit_error"))
-            return redirect('users:users')
+            return redirect("users:users")
 
         user = get_object_or_404(User, id=pk)
         form = CustomUserChangeForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, _("edit_success"))
-            return redirect('users:users')
-        return render(request, 'users/edit.html', {'form': form, 'user': user})
+            return redirect("users:users")
+        return render(request, "users/edit.html", {"form": form, "user": user})
 
 
 class UsersFormDeleteView(LoginRequiredMixin, View):
@@ -93,18 +93,18 @@ class UsersFormDeleteView(LoginRequiredMixin, View):
         user = get_object_or_404(User, id=pk)
         if request.user.id != user.id:
             messages.error(request, _("delete_permission_error"))
-            return redirect('users:users')
-        return render(request, 'users/delete.html', {'user': user})
+            return redirect("users:users")
+        return render(request, "users/delete.html", {"user": user})
 
     def post(self, request, pk):
         user = get_object_or_404(User, id=pk)
         if request.user.id != user.id:
             messages.error(request, _("delete_permission_error"))
-            return redirect('users:users')
+            return redirect("users:users")
 
         Task.objects.filter(author_id=pk).delete()
         Task.objects.filter(executor_id=pk).delete()
 
         user.delete()
         messages.success(request, _("remove_success"))
-        return redirect('users:users')
+        return redirect("users:users")
