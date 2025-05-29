@@ -10,7 +10,7 @@
   <form action="{% url 'tasks:drop_task' pk=task.id %}" method="post" class="m-0">
     {% csrf_token %}
     <button type="submit" name="confirm_delete" value="yes" class="btn btn-danger">
-      {% translate 'Да, удалить' %}
+      {% translate 'remove_user_confirm' %}
     </button>
   </form>
 {% endblock %}
