@@ -20,7 +20,11 @@ class LabelsView(LoginRequiredMixin, View, LabelsViewForm, FormView):
 
 class LabelFormCreateView(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, "labels/new.html", context={"form": LabelCreationForm()})
+        return render(
+            request,
+            "labels/new.html",
+            context={"form": LabelCreationForm()},
+        )
 
     def post(self, request):
         form = LabelCreationForm(request.POST)
@@ -29,8 +33,7 @@ class LabelFormCreateView(LoginRequiredMixin, View):
             label_created = gettext("label_created")
             messages.add_message(request, messages.SUCCESS, label_created)
             return redirect("labels:list")
-        context = {"form": form}
-        return render(request, "labels/new.html", context)
+        return render(request, "labels/new.html", context={"form": form})
 
 
 class LabelEditForm:
@@ -58,7 +61,7 @@ class LabelFormEditView(LoginRequiredMixin, View, LabelEditForm, EditView):
         form = LabelCreationForm(request.POST, instance=label)
         if form.is_valid():
             form.save()
-            label_updated = gettext("label_edit")  # строка перевода, как в тесте
+            label_updated = gettext("label_edit")
             messages.success(request, label_updated)
             return redirect("labels:list")
         return render(
@@ -74,14 +77,14 @@ class LabelForm:
 
 
 class LabelFormDeleteView(LoginRequiredMixin, View, LabelForm, DeleteView):
-    pass
-
     def post(self, request, *args, **kwargs):
         label_id = kwargs.get("pk")
         label = Label.objects.get(id=label_id)
         task = Task.objects.filter(labels=label_id)
         if task:
-            messages.add_message(request, messages.ERROR, gettext("remove_label_error"))
+            messages.add_message(
+                request, messages.ERROR, gettext("remove_label_error")
+            )
             return redirect("labels:list")
         if label:
             label.delete()

@@ -14,25 +14,31 @@ User = get_user_model()
 
 class TaskFilter(FilterSet):
     status = django_filters.ModelChoiceFilter(
-        queryset=Status.objects.all(), label=_("Статус")
+        queryset=Status.objects.all(),
+        label=_("Статус"),
     )
     executor = django_filters.ModelChoiceFilter(
-        queryset=User.objects.all(), label=_("Исполнитель"), empty_label=_("----------")
+        queryset=User.objects.all(),
+        label=_("Исполнитель"),
+        empty_label=_("----------"),
     )
     labels = django_filters.ModelMultipleChoiceFilter(
-        queryset=Label.objects.all(), label=_("Метка")
+        queryset=Label.objects.all(),
+        label=_("Метка"),
     )
     only_own_tasks = BooleanFilter(
-        method="filter_only_own", label=_("Только свои задачи"), widget=CheckboxInput()
+        method="filter_only_own",
+        label=_("Только свои задачи"),
+        widget=CheckboxInput(),
     )
 
     def __init__(self, data=None, *args, **kwargs):
         if data is not None and isinstance(data, QueryDict):
             mutable_data = data.copy()
-            if "labels" in mutable_data and not isinstance(
-                mutable_data.getlist("labels"), list
+            if (
+                "labels" in mutable_data
+                and not isinstance(mutable_data.getlist("labels"), list)
             ):
-                # Не обязательно, но безопасно
                 mutable_data.setlist("labels", mutable_data.getlist("labels"))
             data = mutable_data
         super().__init__(data, *args, **kwargs)

@@ -8,10 +8,12 @@ from django.contrib.auth.models import User
 class TasksCRUDTest(TestCase):
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.user = User.objects.create_user(
+            username="testuser", password="12345"
+        )
         self.client.login(username="testuser", password="12345")
 
-        # Создаем статус для тестов
+        # Создаем статусы для тестов
         self.status1 = Status.objects.create(name="Status 1")
         self.status6 = Status.objects.create(name="Status 6")
 

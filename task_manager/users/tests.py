@@ -20,11 +20,9 @@ class UserCRUDTest(TestCase):
                 "password2": "testpass123",
             },
         )
-
-        self.assertEqual(response.status_code, 302)  # обычно редирект после создания
+        self.assertEqual(response.status_code, 302)
         self.assertTrue(User.objects.filter(username="john").exists())
         user = User.objects.get(username="john")
 
         self.assertIsInstance(user.date_joined, datetime.datetime)
-
         self.assertTrue(user.check_password("testpass123"))

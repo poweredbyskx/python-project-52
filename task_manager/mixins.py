@@ -13,7 +13,11 @@ class DeleteView:
     def get(self, request, *args, **kwargs):
         value_id = kwargs.get("pk")
         value = self.value.objects.get(id=value_id)
-        return render(request, self.template, {"value": value, "value_id": value_id})
+        return render(
+            request,
+            self.template,
+            {"value": value, "value_id": value_id},
+        )
 
 
 class EditView:

@@ -20,7 +20,9 @@ class LogoutView(View):
 class LoginView(View):
     def get(self, request):
         return render(
-            request, "registration/login.html", {"form": AuthenticationForm()}
+            request,
+            "registration/login.html",
+            {"form": AuthenticationForm()},
         )
 
     def post(self, request):
@@ -52,7 +54,9 @@ class UsersView(View):
 class UsersFormCreateView(View):
     def get(self, request):
         return render(
-            request, "registration/register.html", {"form": CustomUserCreationForm()}
+            request,
+            "registration/register.html",
+            {"form": CustomUserCreationForm()},
         )
 
     def post(self, request):
@@ -72,7 +76,9 @@ class UsersFormEditView(LoginRequiredMixin, View):
 
         user = get_object_or_404(User, id=pk)
         form = CustomUserChangeForm(instance=user)
-        return render(request, "users/edit.html", {"form": form, "user": user})
+        return render(
+            request, "users/edit.html", {"form": form, "user": user}
+        )
 
     def post(self, request, pk):
         if str(request.user.id) != str(pk):
@@ -85,7 +91,9 @@ class UsersFormEditView(LoginRequiredMixin, View):
             form.save()
             messages.success(request, _("edit_success"))
             return redirect("users:users")
-        return render(request, "users/edit.html", {"form": form, "user": user})
+        return render(
+            request, "users/edit.html", {"form": form, "user": user}
+        )
 
 
 class UsersFormDeleteView(LoginRequiredMixin, View):
