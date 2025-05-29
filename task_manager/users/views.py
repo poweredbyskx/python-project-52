@@ -90,7 +90,6 @@ class UsersFormEditView(LoginRequiredMixin, View):
 
 class UsersFormDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        # Тест не должен попадать сюда — редиректим сразу
         return redirect('users:users')
 
     def post(self, request, pk):
