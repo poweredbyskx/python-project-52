@@ -1,0 +1,19 @@
+{% extends "application.html" %}
+{% load i18n %}
+
+{% block header %}
+    <h1>{% translate 'remove_user' %}</h1>
+{% endblock %}
+
+{% block content %}
+    <p>{% translate 'remove_user_confirm' %} {{ user.first_name }} {{ user.last_name }}?</p>
+    <form action="{% url 'users:user_delete' user.id %}" method="post" class="m-0">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            {% translate 'remove_user_btn' %}
+        </button>
+        <a href="{% url 'users:users' %}" class="btn btn-secondary ms-2">
+            {% translate 'cancel' %}
+        </a>
+    </form>
+{% endblock %}

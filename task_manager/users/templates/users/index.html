@@ -1,41 +1,38 @@
 {% extends "application.html" %}
 {% load i18n %}
+
 {% block header %}
     <h1>{% translate 'app_users' %}</h1>
 {% endblock %}
 
 {% block content %}
-    <table class="table table-striped">
-        <thead>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>{% translate 'id' %}</th>
+            <th>{% translate 'user_name' %}</th>
+            <th>{% translate 'full_name' %}</th>
+            <th>{% translate 'created_at' %}</th>
+            <th>{% translate 'actions' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
             <tr>
-                <th>{% translate 'id' %}</th>
-                <th>{% translate 'user_name' %}</th>
-                <th>{% translate 'full_name' %}</th>
-                <th>{% translate 'created_at' %}</th>
-                <th>{% translate 'actions' %}</th>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                <td>{{ user.date_joined }}</td>
+                <td class="d-flex">
+                    <a href="{% url 'users:user_update' user.id %}" class="btn btn-primary me-1">
+                        {% translate 'edit_user_btn' %}
+                    </a>
+                    <a href="{% url 'users:user_delete' user.id %}" class="btn btn-link text-danger p-0 m-0 align-baseline">
+                        {% translate "remove" %}
+                    </a>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.first_name }} {{ user.last_name }}</td>
-                    <td>{{ user.date_joined }}</td>
-                    <td class="d-flex">
-    <a href="{% url 'users:user_update' user.id %}" class="btn btn-primary me-1">
-        {% translate 'edit_user_btn' %}
-    </a>
-    <form method="post" action="{% url 'users:user_delete' user.id %}" style="display: inline;">
-  {% csrf_token %}
-  <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline">
-    {% translate "remove" %}
-  </button>
-</form>
-
-</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

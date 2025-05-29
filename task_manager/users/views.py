@@ -90,12 +90,15 @@ class UsersFormEditView(LoginRequiredMixin, View):
 
 class UsersFormDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        return redirect('users:users')
+        user = get_object_or_404(User, id=pk)
+        if request.user.id != user.id:
+            messages.error(request, _("delete_permission_error"))
+            return redirect('users:users')
+        return render(request, 'users/delete.html', {'user': user})
 
     def post(self, request, pk):
         user = get_object_or_404(User, id=pk)
-
-        if str(request.user.id) != str(pk):
+        if request.user.id != user.id:
             messages.error(request, _("delete_permission_error"))
             return redirect('users:users')
 
