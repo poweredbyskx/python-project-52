@@ -100,10 +100,10 @@ class TaskFormDeleteView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         task = get_object_or_404(Task, pk=kwargs.get('pk'))
         if request.user != task.author:
-            messages.error(request, _("remove_task_error"))
+            messages.error(request, gettext("remove_task_error"))
             return redirect(reverse_lazy('tasks:list'))
         task.delete()
-        messages.success(request, _("task_remove"))
+        messages.success(request, gettext("task_remove"))
         return redirect(reverse_lazy('tasks:list'))
 
 
