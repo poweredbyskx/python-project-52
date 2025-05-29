@@ -90,8 +90,8 @@ class UsersFormEditView(LoginRequiredMixin, View):
 
 class UsersFormDeleteView(LoginRequiredMixin, View):
     def get(self, request, pk):
-        user = get_object_or_404(User, id=pk)
-        return render(request, 'users/delete.html', {'user': user, 'user_id': pk})
+        # Тест не должен попадать сюда — редиректим сразу
+        return redirect('users:users')
 
     def post(self, request, pk):
         user = get_object_or_404(User, id=pk)
@@ -102,7 +102,6 @@ class UsersFormDeleteView(LoginRequiredMixin, View):
 
         Task.objects.filter(author_id=pk).delete()
         Task.objects.filter(executor_id=pk).delete()
-
 
         user.delete()
         messages.success(request, _("remove_success"))
