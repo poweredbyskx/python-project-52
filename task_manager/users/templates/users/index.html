@@ -26,12 +26,13 @@
     <a href="{% url 'users:user_update' user.id %}" class="btn btn-primary me-1">
         {% translate 'edit_user_btn' %}
     </a>
-    <form method="post" action="{% url 'users:user_delete' user.id %}" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger btn-sm">
-        {% translate "remove" %}
-    </button>
+    <form method="post" action="{% url 'users:user_delete' user.id %}" style="display: inline;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-link text-danger p-0 m-0 align-baseline">
+    {% translate "remove" %}
+  </button>
 </form>
+
 </td>
                 </tr>
             {% endfor %}
