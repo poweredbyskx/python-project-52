@@ -53,7 +53,7 @@ class TaskFormCreateView(LoginRequiredMixin, View):
             task.author = request.user
             task.save()
             task.labels.set(form.cleaned_data["labels"])
-            messages.success(request, gettext("task_created"))
+            messages.success(request, _("task_created"))  # заменено здесь
             return redirect(reverse_lazy("tasks:list"))
         return render(request, "tasks/new.html", {"form": form})
 
@@ -85,7 +85,7 @@ class TaskFormEditView(LoginRequiredMixin, View, TaskForm, EditView):
         if form.is_valid():
             task = form.save()
             task.labels.set(form.cleaned_data["labels"])
-            messages.success(request, gettext("task_edit"))
+            messages.success(request, _("task_edit"))  # и здесь
             return redirect(reverse_lazy("tasks:list"))
         labels = task.labels.all()
         return render(
